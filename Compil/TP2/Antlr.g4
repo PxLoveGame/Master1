@@ -1,15 +1,15 @@
 grammar projet;
 
-p :  	
+p :
 	(var "(" e ":" type ")")*
 	d*
-	i
+	i;
 
-d :  
+d :
 	function"("( e ":" type)*")"
 	var "(" e ":" type ")")*
-	i
-	
+	i;
+
 i :
 	e "=" e
 	|e"["e"] =" e
@@ -17,38 +17,40 @@ i :
 	|"while" e "do" i
 	|phi"("e*")"
 	|skip
-	|i";"i
-	
-e : 
+	|i";"i;
+
+e :
 	k
 	|x
 	|uop e
 	|e bop e
 	|phi"("e*")"
 	|e"["e"]"
-	|"new array of" type "["e"]"
-	
+	|"new array of" type "["e"]";
+
 ca :
 	"read"
 	|"write"
-	|function
-	
-bop : 
+	|function;
+
+bop :
 	"+"|"-"|"x"|"/"
 	|"and"|"or"
-	|"<"|"<="|"="|">="|">"
-	
+	|"<"|"<="|"="|">="|">";
+
 uop :
 	"-"
 	|"not"
 
-k : 
-	n
+k returns [int value]:
+	n = number {$value = Integer.parseInt($n.text);}
 	|"true"
-	|"false"
+	|"false";
 
 type :
 	"integer"
 	|"boolean"
-	|"array of " type
-	
+	|"array of " type;
+
+number : ('0'..'9')+
+WS : [ \t\r\n]+ -> skip ;
