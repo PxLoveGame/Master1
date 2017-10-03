@@ -69,7 +69,7 @@ public abstract class AbstractDictionary  implements IDictionary{
         a_values = p_values;
     }
 
-    protected final int getSize()
+    public int getSize()
     {
         return a_size;
     }
