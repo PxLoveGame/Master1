@@ -75,7 +75,7 @@ class RTLCte extends RTLInst {
 
     PRegister reg;
     int imm;
-    RTLInst succ;
+    RTLInst succ; // successeur
 
     RTLCte (PRegister reg, int imm, RTLInst succ) {
         this.reg = reg;
