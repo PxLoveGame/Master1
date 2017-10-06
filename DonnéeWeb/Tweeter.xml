@@ -1,0 +1,228 @@
+<!DOCTYPE tweeter[
+	<!ELEMENT tweeter (utilisateur | tweet)*>
+
+      <!ELEMENT utilisateur (nom, profil, photo, description, abonnes, abonnements)>
+            <!ELEMENT nom     (#PCDATA)>
+            <!ELEMENT profil  (#PCDATA)>
+            <!ELEMENT photo	(#PCDATA)>
+            <!ELEMENT description	(#PCDATA)>
+            <!ELEMENT abonnes		(#PCDATA)>
+            <!ELEMENT abonnements (#PCDATA)>
+      <!ATTLIST utilisateur userID ID #REQUIRED>
+
+      <!ELEMENT tweet (timestamp,localisation?,pays?,ville?,OS?,corps,nb_rt,retweets?,tweet_precedent?)>
+        <!ELEMENT timestamp (#PCDATA)>
+        <!ELEMENT localisation (#PCDATA)>
+        <!ELEMENT pays 	(#PCDATA)>
+        <!ELEMENT ville	(#PCDATA)>
+        <!ELEMENT OS 	(#PCDATA)>
+
+
+        <!ELEMENT corps ( (texte | hashtag | ref_utilisateur)*, url*, style)>
+            <!ELEMENT texte   (#PCDATA)>
+            <!ELEMENT hashtag (#PCDATA)>
+            <!ELEMENT ref_utilisateur (#PCDATA)>
+            <!ELEMENT url	    (#PCDATA)>
+            <!ELEMENT style (police, couleur, taille)>
+                <!ELEMENT police  (#PCDATA)>
+                <!ELEMENT couleur (#PCDATA)>
+                <!ELEMENT taille  (#PCDATA)>
+
+        <!ELEMENT nb_rt (#PCDATA)>
+        <!ELEMENT retweets (retweet)*>
+        <!ELEMENT retweet (timestamp)>
+        <!ATTLIST retweet userID IDREF #REQUIRED>
+        <!ATTLIST tweet autoriser_reponse (true|false) "true">
+        <!ELEMENT tweet_precedent (#PCDATA)>
+        <!ATTLIST tweet auteurID IDREF #REQUIRED>
+        <!ATTLIST tweet tweetID IDREF #REQUIRED>
+]>
+
+<!--<!DOCTYPE tweets SYSTEM "tweets.dtd">-->
+<tweeter>
+<!-- Utilisateurs -->
+	<utilisateur userID='u1'>
+          <nom> Kriezt </nom>
+          <profil> Théo </profil>
+          <photo> Théo.jpg</photo>
+          <description> Je sais pas quoi dire</description>
+          <abonnes> 5M </abonnes>
+          <abonnements> 25 000 </abonnements>
+  </utilisateur>
+
+  <utilisateur userID='u2'>
+          <nom> Chaillot </nom>
+          <profil> Anthony </profil>
+          <photo> Anthony.jpg</photo>
+          <description> Blablabla</description>
+          <abonnes> 5M </abonnes>
+          <abonnements> 25 000 </abonnements>
+  </utilisateur>
+
+  <utilisateur userID='u3'>
+          <nom> Dodard </nom>
+          <profil> Mathieu </profil>
+          <photo> Mathieu.jpg</photo>
+          <description> Je suis pas très drole et un peu con </description>
+          <abonnes> 5M </abonnes>
+          <abonnements> 25 000 </abonnements>
+  </utilisateur>
+
+<!-- Tweets -->
+  <tweet tweetID = "t1" auteurID = "u1" autoriser_reponse="true">
+      <timestamp> 1505732410 </timestamp>
+      <localisation> 42:51 </localisation>
+      <pays> FR </pays>
+      <ville> Paris </ville>
+      <OS> Android </OS>
+      <corps>
+      	  <texte> . </texte>
+          <ref_utilisateur> @example </ref_utilisateur>
+          <texte> absolutely smashed it at </texte>
+          <hashtag> #I&lt;3XML! </hashtag>
+          <texte> Catch him at the official </texte>
+          <ref_utilisateur> @clubmtvuk </ref_utilisateur>
+          <texte>after party tonight @ 10pm </texte>
+          <style>
+              <police> Default </police>
+              <couleur> Default </couleur>
+              <taille> Default </taille>
+          </style>
+      </corps>
+      <nb_rt> 5 </nb_rt>
+      <retweets>
+        <retweet userID = "u2">
+          <timestamp> 1505732 </timestamp>
+        </retweet>
+      </retweets>
+  </tweet>
+
+  <tweet tweetID = "t2" auteurID = "u1" autoriser_reponse="true">
+      <timestamp> 1505732420 </timestamp>
+      <localisation> 42:51 </localisation>
+      <pays> UK </pays>
+      <ville> Londre </ville>
+      <OS> Android </OS>
+      <corps>
+      	  <texte> . </texte>
+          <ref_utilisateur> @example </ref_utilisateur>
+          <texte> absolutely smashed it at </texte>
+          <hashtag> #mtvlivelockdown! </hashtag>
+          <texte> Catch him at the official </texte>
+          <ref_utilisateur> @clubmtvuk </ref_utilisateur>
+          <texte>after party tonight @ 10pm </texte>
+          <style>
+              <police> Default </police>
+              <couleur> Default </couleur>
+              <taille> Default </taille>
+          </style>
+      </corps>
+      <nb_rt> 0 </nb_rt>
+      <retweets>
+        <retweet userID = "u3">
+          <timestamp> 150573211 </timestamp>
+        </retweet>
+        <retweet userID = "u3">
+          <timestamp> 150573245 </timestamp>
+        </retweet>
+        <retweet userID = "u2">
+          <timestamp> 150573287 </timestamp>
+        </retweet>
+        <retweet userID = "u2">
+          <timestamp> 150573269 </timestamp>
+        </retweet>
+      </retweets>
+  </tweet>
+
+  <tweet tweetID = "t3" auteurID = "u1" autoriser_reponse="true">
+      <timestamp> 1505732430 </timestamp>
+      <localisation> 42:51 </localisation>
+      <pays> UK </pays>
+      <ville> Londre </ville>
+      <OS> Android </OS>
+      <corps>
+      	  <texte> . </texte>
+          <ref_utilisateur> @example </ref_utilisateur>
+          <texte> absolutely smashed it at </texte>
+          <hashtag> #I&lt;3XML! </hashtag>
+          <texte> Catch him at the official </texte>
+          <ref_utilisateur> @clubmtvuk </ref_utilisateur>
+          <texte>after party tonight @ 10pm </texte>
+          <style>
+              <police> Default </police>
+              <couleur> Default </couleur>
+              <taille> Default </taille>
+          </style>
+      </corps>
+      <nb_rt> 0 </nb_rt>
+  </tweet>
+
+  <tweet tweetID = "t4" auteurID = "u2" autoriser_reponse="true">
+      <timestamp> 1505732440 </timestamp>
+      <localisation> 42:51 </localisation>
+      <pays> UK </pays>
+      <ville> Londre </ville>
+      <OS> Android </OS>
+      <corps>
+      	  <texte> . </texte>
+          <ref_utilisateur> @example </ref_utilisateur>
+          <texte> absolutely smashed it at </texte>
+          <hashtag> #mtvlivelockdown! </hashtag>
+          <texte> Catch him at the official </texte>
+          <ref_utilisateur> @clubmtvuk </ref_utilisateur>
+          <texte>after party tonight @ 10pm </texte>
+          <style>
+              <police> Default </police>
+              <couleur> Default </couleur>
+              <taille> Default </taille>
+          </style>
+      </corps>
+      <nb_rt> 0 </nb_rt>
+  </tweet>
+
+  <tweet tweetID = "t5" auteurID = "u2" autoriser_reponse="true">
+      <timestamp> 1505732450 </timestamp>
+      <localisation> 42:51 </localisation>
+      <pays> UK </pays>
+      <ville> Londre </ville>
+      <OS> Windows </OS>
+      <corps>
+      	  <texte> . </texte>
+          <ref_utilisateur> @example </ref_utilisateur>
+          <texte> absolutely smashed it at </texte>
+          <hashtag> #mtvlivelockdown! </hashtag>
+          <texte> Catch him at the official </texte>
+          <ref_utilisateur> @clubmtvuk </ref_utilisateur>
+          <texte>after party tonight @ 10pm </texte>
+          <style>
+              <police> Default </police>
+              <couleur> Default </couleur>
+              <taille> Default </taille>
+          </style>
+      </corps>
+      <nb_rt> 0 </nb_rt>
+  </tweet>
+
+  <tweet tweetID = "t6" auteurID = "u3" autoriser_reponse="true">
+      <timestamp> 1505732460 </timestamp>
+      <localisation> 42:51 </localisation>
+      <pays> UK </pays>
+      <ville> Londre </ville>
+      <OS> Mac </OS>
+      <corps>
+      	  <texte> . </texte>
+          <ref_utilisateur> @example </ref_utilisateur>
+          <texte> absolutely smashed it at </texte>
+          <hashtag> #mtvlivelockdown! </hashtag>
+          <texte> Catch him at the official </texte>
+          <ref_utilisateur> @clubmtvuk </ref_utilisateur>
+          <texte>after party tonight @ 10pm </texte>
+          <style>
+              <police> Default </police>
+              <couleur> Default </couleur>
+              <taille> Default </taille>
+          </style>
+      </corps>
+      <nb_rt> 0 </nb_rt>
+  </tweet>
+</tweeter>

@@ -156,7 +156,7 @@ abstract class RTLBinOp extends RTLInst{
 class RTLAdd extends RTLBinOp {
 
     RTLAdd (PRegister regIn1, PRegister regIn2, PRegister regOut,
-             RTLInst succ) {
+            RTLInst succ) {
         this.regIn1 = regIn1;
         this.regIn2 = regIn2;
         this.regOut = regOut;
@@ -168,7 +168,7 @@ class RTLAdd extends RTLBinOp {
 class RTLSub extends RTLBinOp {
 
     RTLSub (PRegister regIn1, PRegister regIn2, PRegister regOut,
-             RTLInst succ) {
+            RTLInst succ) {
         this.regIn1 = regIn1;
         this.regIn2 = regIn2;
         this.regOut = regOut;
@@ -180,7 +180,7 @@ class RTLSub extends RTLBinOp {
 class RTLMul extends RTLBinOp {
 
     RTLMul (PRegister regIn1, PRegister regIn2, PRegister regOut,
-             RTLInst succ) {
+            RTLInst succ) {
         this.regIn1 = regIn1;
         this.regIn2 = regIn2;
         this.regOut = regOut;
@@ -192,7 +192,7 @@ class RTLMul extends RTLBinOp {
 class RTLDiv extends RTLBinOp {
 
     RTLDiv (PRegister regIn1, PRegister regIn2, PRegister regOut,
-             RTLInst succ) {
+            RTLInst succ) {
         this.regIn1 = regIn1;
         this.regIn2 = regIn2;
         this.regOut = regOut;
@@ -204,7 +204,7 @@ class RTLDiv extends RTLBinOp {
 class RTLAnd extends RTLBinOp {
 
     RTLAnd (PRegister regIn1, PRegister regIn2, PRegister regOut,
-             RTLInst succ) {
+            RTLInst succ) {
         this.regIn1 = regIn1;
         this.regIn2 = regIn2;
         this.regOut = regOut;
@@ -216,7 +216,7 @@ class RTLAnd extends RTLBinOp {
 class RTLOr extends RTLBinOp {
 
     RTLOr (PRegister regIn1, PRegister regIn2, PRegister regOut,
-             RTLInst succ) {
+           RTLInst succ) {
         this.regIn1 = regIn1;
         this.regIn2 = regIn2;
         this.regOut = regOut;
