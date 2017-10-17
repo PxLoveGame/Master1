@@ -21,7 +21,7 @@ to setup
   ]
   create-junkies nb-junkies-max
   [
-    set color pink 
+    set color pink
     setxy random-xcor random-ycor
     set size 2
     set energie 100
@@ -61,7 +61,7 @@ to go_junkies
 end
 
 to go_dealers
-    wiggle 
+    wiggle
 end
 
 to go_cops
@@ -73,26 +73,26 @@ end
 to life-of-weed
   if grow? = true
   [
-    ifelse cpt-temps > 0 
+    ifelse cpt-temps > 0
     [
       set cpt-temps cpt-temps - 1
     ]
     [
-      set taille-plante taille-plante + 1 
+      set taille-plante taille-plante + 1
       set pcolor scale-color green taille-plante 0 70
-      set cpt-temps cpt-temps-init        
+      set cpt-temps cpt-temps-init
     ]
-  ] 
+  ]
 end
 
 to die-of-weed
   if grow? = false
   [
-    set taille-plante taille-plante - 1 
+    set taille-plante taille-plante - 1
     set pcolor scale-color green taille-plante 0 70
   ]
-  
-end  
+
+end
 
 to live-or-die
   if taille-plante = taille-plante-max
@@ -105,7 +105,7 @@ to live-or-die
   ]
 end
 
-to wiggle 
+to wiggle
   fd 1.5
   rt random 50
   lt random 50
@@ -124,10 +124,10 @@ to smoke
 end
 
 to follow-dealer
- Let dealer min-one-of dealers in-radius 15 [distance myself]
- ifelse dealer != nobody
+ Let d min-one-of dealers in-radius 15 [distance myself]
+ ifelse d != nobody
  [
-   face dealer
+   face d
    fd 1
  ]
  [
@@ -141,7 +141,7 @@ to search-and-destroy-junkies
   [
     face target
     fd 1.5
-  ] 
+  ]
   set target min-one-of junkies in-radius 0.2 [distance myself]
   if target != nobody
   [
@@ -156,8 +156,6 @@ to get-away
   fd 25
 end
 
-to reproduct
-  if energie >= 100
 
 
 
@@ -167,10 +165,10 @@ to reproduct
 GRAPHICS-WINDOW
 255
 13
-1109
-887
-30
-30
+1056
+815
+-1
+-1
 13.0
 1
 10
@@ -234,7 +232,7 @@ temps-croissance-max
 temps-croissance-max
 1
 100
-100
+49.0
 1
 1
 NIL
@@ -249,7 +247,7 @@ taille-plante-max
 taille-plante-max
 50
 200
-200
+200.0
 1
 1
 NIL
@@ -264,7 +262,7 @@ conso-junk
 conso-junk
 1
 50
-9
+17.0
 1
 1
 NIL
@@ -315,7 +313,7 @@ nb-junkies-max
 nb-junkies-max
 1
 30
-30
+30.0
 1
 1
 NIL
@@ -330,7 +328,7 @@ nb-dealers-max
 nb-dealers-max
 0
 5
-2
+0.0
 1
 1
 NIL
@@ -345,7 +343,7 @@ nb-cops-max
 nb-cops-max
 0
 10
-2
+0.0
 1
 1
 NIL
@@ -372,12 +370,12 @@ SLIDER
 76
 472
 249
-506
+505
 cops_radius
 cops_radius
 5
 20
-5
+7.0
 1
 1
 NIL
@@ -387,12 +385,12 @@ SLIDER
 68
 243
 241
-277
+276
 smoke-gain
 smoke-gain
 20
 100
-50
+40.0
 1
 1
 NIL
@@ -402,12 +400,12 @@ SLIDER
 76
 513
 249
-547
+546
 kill-gain
 kill-gain
 0
 80
-52
+25.0
 1
 1
 NIL
@@ -763,9 +761,8 @@ false
 0
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
-
 @#$#@#$#@
-NetLogo 5.1.0
+NetLogo 6.0.2
 @#$#@#$#@
 setup
 ask turtles [ repeat 150 [ go ] ]
@@ -783,7 +780,6 @@ true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
-
 @#$#@#$#@
 1
 @#$#@#$#@

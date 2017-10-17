@@ -17,7 +17,7 @@ to setup
   set-default-shape lapins-mâle "dot"
   set-default-shape lapins-femelle "dot"
   set-default-shape loups "face sad"
-  
+
   ask patches [set pcolor black]
   ;; place les tortues de maniere aleatoire
   create-lapins-mâle nombre-lapins-mâle [
@@ -30,7 +30,7 @@ to setup
     setxy random-xcor random-ycor
     set size 5 ;; pour mieux voir les tortues
   ]
-  
+
   create-loups nombre-loups [
     set color red
     setxy random-xcor random-ycor
@@ -84,14 +84,14 @@ end
 
 
 to update-patches-color
-  ask patches 
+  ask patches
   [
     ifelse odeur-mâle > odeur-femelle
     [
-      set pcolor scale-color pink odeur-mâle 1 (max-odeur / 1.3) 
+      set pcolor scale-color pink odeur-mâle 1 (max-odeur / 1.3)
     ]
     [
-      set pcolor scale-color blue odeur-femelle 1 (max-odeur / 1.3) 
+      set pcolor scale-color blue odeur-femelle 1 (max-odeur / 1.3)
     ]
   ]
 end
@@ -115,15 +115,15 @@ to suivre-odeur-sans-uphill
   [
     ifelse [odeur-mâle] of m > odeur-mâle[
       face m
-    ] 
+    ]
     [
       agiter
     ]
   ]
-  [ 
+  [
     ifelse [odeur-femelle] of f > odeur-femelle[
       face f
-    ] 
+    ]
     [
       agiter
     ]
@@ -134,7 +134,7 @@ to suivre-femelle
   let p max-one-of neighbors [odeur-femelle]
   ifelse [odeur-femelle] of p > odeur-femelle[
     face p
-  ] 
+  ]
   [
     agiter
   ]
@@ -144,7 +144,7 @@ to suivre-mâle
   let p max-one-of neighbors [odeur-mâle]
   ifelse [odeur-mâle] of p > odeur-mâle[
     face p
-  ] 
+  ]
   [
     agiter
   ]
@@ -153,29 +153,29 @@ end
 to distance-minimum
   let voisins-mâle min-one-of other lapins-mâle with [color = blue] [distance myself]
   let voisins-femelle min-one-of other lapins-femelle with [color = pink] [distance myself]
-  set voisins-mâle distance distance-entre-lapins 
+  set voisins-mâle distance distance-entre-lapins
   set  voisins-femelle distance distance-entre-lapins
 end
 
 to fuite
-  let loup min-one-of loups in-radius 5 [distance myself]
-  if loup != nobody
+  let l min-one-of loups in-radius 5 [distance myself]
+  if l != nobody
   [
-    face loup
+    face l
     set odeur-mâle 0
     set odeur-femelle 0
     rt 90
     fd 5
-  ] 
+  ]
 end
 
-to agiter 
+to agiter
   rt random 50
   lt random 50
 end
 
 ;;-------------------------------------------------------
-;; 
+;;
 ;;  Auteur: J. Ferber
 ;;
 ;;------------------------------------------------------
@@ -183,10 +183,10 @@ end
 GRAPHICS-WINDOW
 511
 44
-1026
-580
-50
-50
+1024
+558
+-1
+-1
 5.0
 1
 10
@@ -250,7 +250,7 @@ nombre-lapins-mâle
 nombre-lapins-mâle
 1
 200
-25
+43.0
 1
 1
 NIL
@@ -265,7 +265,7 @@ nombre-loups
 nombre-loups
 1
 50
-4
+11.0
 1
 1
 NIL
@@ -280,7 +280,7 @@ taux-diffusion
 taux-diffusion
 0
 100
-69
+34.0
 1
 1
 NIL
@@ -295,7 +295,7 @@ max-odeur
 max-odeur
 1
 50
-50
+12.0
 1
 1
 NIL
@@ -310,7 +310,7 @@ taux-evaporation
 taux-evaporation
 1
 100
-6
+9.0
 1
 1
 NIL
@@ -325,7 +325,7 @@ nombre-lapins-femelle
 nombre-lapins-femelle
 0
 100
-10
+20.0
 1
 1
 NIL
@@ -340,7 +340,7 @@ distance-entre-lapins
 distance-entre-lapins
 1
 10
-10
+10.0
 1
 1
 NIL
@@ -356,7 +356,6 @@ Dans ce programme, il y a deux types de tortues, chacune ayant sa propre couleur
 
 Cr�� par J. Ferber  
 http://www.lirmm.fr/~ferber
-
 @#$#@#$#@
 default
 true
@@ -639,9 +638,8 @@ false
 0
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
-
 @#$#@#$#@
-NetLogo 5.1.0
+NetLogo 6.0.2
 @#$#@#$#@
 setup
 ask turtles [ repeat 150 [ go ] ]
@@ -659,7 +657,6 @@ true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
-
 @#$#@#$#@
 0
 @#$#@#$#@
