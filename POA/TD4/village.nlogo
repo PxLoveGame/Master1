@@ -1,174 +1,182 @@
-patches-own[cpt-temps cpt-temps-init taille-plante grow?]
-breed[junkies junky]
-breed[dealers dealer]
-breed[cops cop]
-junkies-own[energie]
-cops-own[energie]
+breed [sheeps sheep]
+breed [villageois villageoi]
+globals[nb-sheeps energie-village]
 
-;; if random-float 100 < density
+patches-own[
+  village?
+  zone-cueillette?
+]
+
+villageois-own[
+  ctask
+  energie-recolte
+]
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Setup procedures ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 to setup
   clear-all
-  set-default-shape turtles "person"
-  ;; randomly distribute wood chips
-  ask patches
+  set-default-shape sheeps "sheep"
+  set-default-shape villageois "person"
+  setup-patches
+  set energie-village energie-initial-village
+  
+  create-sheeps number-sheeps
   [
-   set cpt-temps-init random-float temps-croissance-max
-   set cpt-temps cpt-temps-init
-   set taille-plante 0
-   set grow? true
-   set pcolor black
-  ]
-  create-junkies nb-junkies-max
-  [
-    set color pink
+    set color white
+    set nb-sheeps number-sheeps
     setxy random-xcor random-ycor
-    set size 2
-    set energie 100
+    set size 1
   ]
-  create-dealers nb-dealers-max
+  create-villageois nb-villageois
   [
-    set color brown
-    setxy random-xcor random-ycor
-    set size 3
+    set color red
+    set ctask "choose-their-job"
+    setxy 0 0
+    set size 1.5
   ]
-  create-cops nb-cops-max
-  [
-    set color blue
-    setxy random-xcor random-ycor
-    set size 2
-    set energie 0
+  reset-ticks
+end
+
+to setup-patches
+  ask patches[
+    setup-village
+    setup-zone-cueillette
+    recolor-patches
   ]
 end
 
-to go_peoples
-  ask junkies [go_junkies]
-  ask dealers [go_dealers]
-  ask cops [go_cops]
+to setup-village
+  set village? (distancexy 0 0) < 3
+  
+end
+
+to setup-zone-cueillette
+  set zone-cueillette? (distancexy (max-pxcor - 2) (max-pycor - 2)) < 3
+end
+
+to recolor-patches
+  ifelse village?
+  [ set pcolor brown ]
+  [ if zone-cueillette?
+    [ set pcolor green ]
+  ]
+end
+
+;;;;;;;;;;;;;;;;;;;;;
+;;; Go procedures ;;;
+;;;;;;;;;;;;;;;;;;;;;
+
+to go
+  ask sheeps[go-sheeps]
+  go-villageois
   update-plots
 end
 
-to go_patches
-life-of-weed
-live-or-die
-die-of-weed
+;; sheeps procedure 
+
+to go-sheeps
+  sheeps-reproduction
+  wiggle 
+  fd 0.2
 end
 
-to go_junkies
-
-  follow-dealer
-  smoke
-end
-
-to go_dealers
-    wiggle
-end
-
-to go_cops
-  wiggle
-  search-and-destroy-junkies
-end
-
-
-to life-of-weed
-  if grow? = true
+to sheeps-reproduction
+  if nb-sheeps < 400
   [
-    ifelse cpt-temps > 0
-    [
-      set cpt-temps cpt-temps - 1
+    let reproduction? random 1000
+    if reproduction? <= reproduction% * 10
+    [ hatch 1
+      set nb-sheeps nb-sheeps + 1
     ]
-    [
-      set taille-plante taille-plante + 1
-      set pcolor scale-color green taille-plante 0 70
-      set cpt-temps cpt-temps-init
-    ]
-  ]
+  ]  
 end
 
-to die-of-weed
-  if grow? = false
+;;villageois procedure 
+
+to go-villageois
+  ask villageois[run ctask]
+  set energie-village energie-village - conso-energie
+end
+
+to choose-their-job
+  let x random 100
+  ifelse x < taux-cueilleur 
   [
-    set taille-plante taille-plante - 1
-    set pcolor scale-color green taille-plante 0 70
+    set color yellow
+    set ctask "cueilleur"
   ]
-
-end
-
-to live-or-die
-  if taille-plante = taille-plante-max
   [
-    set grow? false
-  ]
-  if taille-plante = 0
-  [
-    set grow? true
+    set color blue
+    set ctask "chasseur"
   ]
 end
 
-to wiggle
-  fd 1.5
-  rt random 50
-  lt random 50
-end
-
-to smoke
-  if pcolor != black
-  [
-    if taille-plante >= conso-junk
-    [
-      set taille-plante taille-plante - conso-junk
-      set pcolor scale-color green taille-plante 0 70
-      set energie energie + smoke-gain
-    ]
-  ]
-end
-
-to follow-dealer
- Let d min-one-of dealers in-radius 15 [distance myself]
- ifelse d != nobody
- [
-   face d
-   fd 1
- ]
- [
-   wiggle
- ]
-end
-
-to search-and-destroy-junkies
-  Let target min-one-of junkies in-radius cops_radius [distance myself]
-  if target != nobody
+to chasseur
+  let target max-one-of sheeps in-radius 5 [distance myself]
+  ifelse target != nobody
   [
     face target
-    fd 1.5
+    fd 1
   ]
-  set target min-one-of junkies in-radius 0.2 [distance myself]
+  [
+    wiggle
+    fd 1
+  ]
+  set target max-one-of sheeps in-radius 0.2 [distance myself]
   if target != nobody
   [
-    ask target [die]
-    set energie energie + kill-gain
-    get-away
+    ask target[die]
+    set energie-recolte energie-chasse
+    set ctask "retour-village"
   ]
 end
 
-to get-away
-  rt random 360
-  fd 25
+to cueilleur
+  face patch 14 14
+  wiggle
+  fd 1
+  if pcolor = green
+  [
+    set energie-recolte energie-cueillette
+    set ctask "retour-village"
+  ]
+end
+
+to retour-village
+  face patch 0 0
+  wiggle
+  fd 1 
+  if pcolor = brown
+  [
+    set energie-village energie-village + energie-recolte
+    ifelse color = blue
+    [set ctask "chasseur"]
+    [set ctask "cueilleur"]
+  ]
 end
 
 
+to wiggle  ;; turtle procedure
+  rt random 40
+  lt random 40
+end
 
-
-; Copyright 1997 Uri Wilensky.
-; See Info tab for full copyright and license.
+;;hatch <= fonction poour cloner
+;; ask target[die] pour tuer la cible
 @#$#@#$#@
 GRAPHICS-WINDOW
-255
-13
-1056
-815
--1
--1
+210
+10
+649
+470
+16
+16
 13.0
 1
 10
@@ -179,39 +187,22 @@ GRAPHICS-WINDOW
 1
 1
 1
--30
-30
--30
-30
+-16
+16
+-16
+16
 0
 0
-0
+1
 ticks
 30.0
 
 BUTTON
-109
-12
-223
-46
-go_patches
-go_patches
-T
-1
-T
-PATCH
+10
+17
+83
+50
 NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-20
-16
-85
-49
-setup
 setup
 NIL
 1
@@ -224,138 +215,27 @@ NIL
 1
 
 SLIDER
-1142
-12
-1359
-45
-temps-croissance-max
-temps-croissance-max
-1
-100
-49.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-1142
-50
-1314
-83
-taille-plante-max
-taille-plante-max
-50
-200
-200.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-67
-197
-240
-230
-conso-junk
-conso-junk
-1
-50
-17.0
-1
-1
-NIL
-HORIZONTAL
-
-PLOT
-1154
-509
-1354
-659
-Junkies
-NIL
-NIL
-0.0
-10.0
-0.0
-10.0
-true
-false
-"" ""
-PENS
-"default" 1.0 0 -16777216 true "" "plot count junkies"
-
-PLOT
-1153
-342
-1353
-492
-Weed
-NIL
-NIL
-0.0
-10.0
-0.0
-10.0
-true
-false
-"" ""
-PENS
-"Weed" 1.0 0 -16777216 true "sum [taille-plante] of patches" "sum[taille-plante] of patches"
-
-SLIDER
-66
-150
-239
+11
+175
 183
-nb-junkies-max
-nb-junkies-max
-1
-30
-30.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-69
-338
-242
-371
-nb-dealers-max
-nb-dealers-max
+208
+number-sheeps
+number-sheeps
 0
-5
-0.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-76
-427
-249
-460
-nb-cops-max
-nb-cops-max
-0
-10
-0.0
+400
+25
 1
 1
 NIL
 HORIZONTAL
 
 BUTTON
-112
-55
-226
-89
-go_peoples
-go_peoples
+114
+19
+177
+52
+NIL
+go
 T
 1
 T
@@ -367,118 +247,205 @@ NIL
 1
 
 SLIDER
-76
-472
-249
-505
-cops_radius
-cops_radius
+12
+214
+184
+247
+reproduction%
+reproduction%
+0.5
 5
-20
-7.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-68
-243
-241
-276
-smoke-gain
-smoke-gain
-20
-100
-40.0
-1
+5
+0.1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-76
-513
-249
-546
-kill-gain
-kill-gain
+10
+134
+182
+167
+nb-villageois
+nb-villageois
 0
-80
-25.0
+100
+20
 1
 1
 NIL
 HORIZONTAL
+
+MONITOR
+29
+379
+135
+424
+ count sheeps
+count sheeps
+17
+1
+11
+
+SLIDER
+699
+94
+903
+127
+energie-initial-village
+energie-initial-village
+0
+100
+50
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+701
+137
+873
+170
+energie-chasse
+energie-chasse
+0
+60
+50
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+885
+139
+1069
+172
+energie-cueillette
+energie-cueillette
+0
+20
+20
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+10
+99
+182
+132
+taux-cueilleur
+taux-cueilleur
+0
+100
+50
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+918
+93
+1090
+126
+conso-energie
+conso-energie
+0
+5
+5
+0.1
+1
+NIL
+HORIZONTAL
+
+MONITOR
+31
+433
+180
+478
+NIL
+energie-village
+17
+1
+11
+
+PLOT
+33
+488
+648
+667
+Population
+time
+pop
+0.0
+10.0
+0.0
+10.0
+true
+true
+"" ""
+PENS
+"sheep" 1.0 0 -11085214 true "" "plot count sheeps"
+"chasseur" 1.0 0 -13791810 true "" "plot count villageois with [color = blue]"
+"energie" 1.0 0 -16580092 true "" "plot energie-village"
+
+BUTTON
+107
+57
+170
+90
+NIL
+go
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
 
-This project is inspired by the behavior of termites gathering wood chips into piles. The termites follow a set of simple rules. Each termite starts wandering randomly. If it bumps into a wood chip, it picks the chip up, and continues to wander randomly. When it bumps into another wood chip, it finds a nearby empty space and puts its wood chip down.  With these simple rules, the wood chips eventually end up in a single pile.
+(a general understanding of what the model is trying to show or explain)
+
+## HOW IT WORKS
+
+(what rules the agents use to create the overall behavior of the model)
 
 ## HOW TO USE IT
 
-Click the SETUP button to set up the termites (white) and wood chips (yellow). Click the GO button to start the simulation.  The termites turn orange when they are carrying a wood chip.
-
-The NUMBER slider controls the number of termites. (Note: Changes in the NUMBER slider do not take effect until the next setup.) The DENSITY slider controls the initial density of wood chips.
+(how to use the model, including a description of each of the items in the Interface tab)
 
 ## THINGS TO NOTICE
 
-As piles of wood chips begin to form, the piles are not "protected" in any way. That is, termites sometimes take chips away from existing piles. That strategy might seem counter-productive. But if the piles were "protected", you would end up with lots of little piles, not one big one.
-
-The final piles are roughly round.  Why is this?  What other physical situations also produce round things?
-
-In general, the number of piles decreases with time. Why? Some piles disappear, when termites carry away all of the chips. And there is no way to start a new pile from scratch, since termites always put their wood chips near other wood chips. So the number of piles must decrease over time. (The only way a "new" pile starts is when an existing pile splits into two.)
-
-This project is a good example of a "decentralized" strategy. There is no termite in charge, and no special pre-designated site for the piles. Each termite follows a set of simple rules, but the colony as a whole accomplishes a rather sophisticated task.
+(suggested things for the user to notice while running the model)
 
 ## THINGS TO TRY
 
-Do the results change if you use just a single termite?  What if you use several thousand termites?
-
-When there are just two piles left, which of them is most likely to "win" as the single, final pile? How often does the larger of the two piles win? If one pile has only a single wood chip, and the other pile has the rest of the wood chips, what are the chances that the first pile will win?
+(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
 
 ## EXTENDING THE MODEL
 
-Can you extend the model to have the termites sort several colors of wood?
-
-Plot the number of piles, or their average size, or the number of termites carrying wood chips, as the model runs.
+(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
 
 ## NETLOGO FEATURES
 
-Notice that the wood chips do not exist as objects. They are just represented as colors in the patches. The termites update the patch colors as they pick up and put down the wood chips. In effect, the patches are being used as the data structure. This strategy is useful in many NetLogo programs.
-
-Note than when you stop the GO forever button, the termites keep moving for a little while.  This is because they are each finishing the commands in the GO procedure.  To do this, they must finish their current cycle of finding a chip, finding a pile, and then finding an empty spot near the pile.  In most models, the GO function only moves the model forward one step, but in this model, the GO function is written to advance the turtles through a full cycle of activity.  See the "Buttons" section of the Programming Guide in the User Manual for more information on turtle forever buttons.
+(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
 
 ## RELATED MODELS
 
- * Painted Desert Challenge
- * Shepherds
- * State Machine Example
+(models in the NetLogo Models Library and elsewhere which are of related interest)
 
+## CREDITS AND REFERENCES
 
-## HOW TO CITE
-
-If you mention this model in a publication, we ask that you include these citations for the model itself and for the NetLogo software:
-
-* Wilensky, U. (1997).  NetLogo Termites model.  http://ccl.northwestern.edu/netlogo/models/Termites.  Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
-* Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
-
-## COPYRIGHT AND LICENSE
-
-Copyright 1997 Uri Wilensky.
-
-![CC BY-NC-SA 3.0](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png)
-
-This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 License.  To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/3.0/ or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
-
-Commercial licenses are also available. To inquire about commercial licenses, please contact Uri Wilensky at uri@northwestern.edu.
-
-This model was created as part of the project: CONNECTED MATHEMATICS: MAKING SENSE OF COMPLEX PHENOMENA THROUGH BUILDING OBJECT-BASED PARALLEL MODELS (OBPML).  The project gratefully acknowledges the support of the National Science Foundation (Applications of Advanced Technologies Program) -- grant numbers RED #9552950 and REC #9632612.
-
-This model was developed at the MIT Media Lab using CM StarLogo.  See Resnick, M. (1994) "Turtles, Termites and Traffic Jams: Explorations in Massively Parallel Microworlds."  Cambridge, MA: MIT Press.  Adapted to StarLogoT, 1997, as part of the Connected Mathematics Project.
-
-This model was converted to NetLogo as part of the projects: PARTICIPATORY SIMULATIONS: NETWORK-BASED DESIGN FOR SYSTEMS LEARNING IN CLASSROOMS and/or INTEGRATED SIMULATION AND MODELING ENVIRONMENT. The project gratefully acknowledges the support of the National Science Foundation (REPP & ROLE programs) -- grant numbers REC #9814682 and REC-0126227. Converted from StarLogoT to NetLogo, 2001.
+(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
 @#$#@#$#@
 default
 true
@@ -672,6 +639,22 @@ Polygon -7500403 true true 135 105 90 60 45 45 75 105 135 135
 Polygon -7500403 true true 165 105 165 135 225 105 255 45 210 60
 Polygon -7500403 true true 135 90 120 45 150 15 180 45 165 90
 
+sheep
+false
+15
+Circle -1 true true 203 65 88
+Circle -1 true true 70 65 162
+Circle -1 true true 150 105 120
+Polygon -7500403 true false 218 120 240 165 255 165 278 120
+Circle -7500403 true false 214 72 67
+Rectangle -1 true true 164 223 179 298
+Polygon -1 true true 45 285 30 285 30 240 15 195 45 210
+Circle -1 true true 3 83 150
+Rectangle -1 true true 65 221 80 296
+Polygon -1 true true 195 285 210 285 210 240 240 210 195 210
+Polygon -7500403 true false 276 85 285 105 302 99 294 83
+Polygon -7500403 true false 219 85 210 105 193 99 201 83
+
 square
 false
 0
@@ -756,16 +739,22 @@ Line -7500403 true 40 84 269 221
 Line -7500403 true 40 216 269 79
 Line -7500403 true 84 40 221 269
 
+wolf
+false
+0
+Polygon -16777216 true false 253 133 245 131 245 133
+Polygon -7500403 true true 2 194 13 197 30 191 38 193 38 205 20 226 20 257 27 265 38 266 40 260 31 253 31 230 60 206 68 198 75 209 66 228 65 243 82 261 84 268 100 267 103 261 77 239 79 231 100 207 98 196 119 201 143 202 160 195 166 210 172 213 173 238 167 251 160 248 154 265 169 264 178 247 186 240 198 260 200 271 217 271 219 262 207 258 195 230 192 198 210 184 227 164 242 144 259 145 284 151 277 141 293 140 299 134 297 127 273 119 270 105
+Polygon -7500403 true true -1 195 14 180 36 166 40 153 53 140 82 131 134 133 159 126 188 115 227 108 236 102 238 98 268 86 269 92 281 87 269 103 269 113
+
 x
 false
 0
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
+
 @#$#@#$#@
-NetLogo 6.0.2
+NetLogo 5.1.0
 @#$#@#$#@
-setup
-ask turtles [ repeat 150 [ go ] ]
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
@@ -780,6 +769,7 @@ true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
+
 @#$#@#$#@
-1
+0
 @#$#@#$#@
