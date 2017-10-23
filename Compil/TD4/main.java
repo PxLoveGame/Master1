@@ -1,5 +1,4 @@
 
-import com.sun.org.apache.xpath.internal.SourceTree;
 
 import java.util.ArrayList;
 
@@ -89,7 +88,6 @@ class Graphe {
 
     public Graphe(ArrayList<Sommet> smts)
     {
-        System.err.println("Taille : " + smts.size());
         sommets = smts;
         sommets_spille = new ArrayList<Sommet>();
     }
@@ -107,8 +105,7 @@ class Graphe {
     }
 
     //retourne un sommet ayant nb de voisins < k
-    private Sommet sommet_trivialement_coloriable(int k)
-    {
+    private Sommet sommet_trivialement_coloriable(int k){
         for (Sommet sommet : sommets)
         {
             if(sommet.voisins.size() < k)
@@ -120,7 +117,6 @@ class Graphe {
     }
     // retourne le sommet ayant le plus de voisins (dans le cas ou le nb de voisins > k )
     private Sommet sommet_avec_MaxVoisin(){
-        System.out.println("In MaxVoisins, j'ai " + sommets.size() + " sommets");
         Sommet s = sommets.get(0);
         for (Sommet sommet : sommets)
         {
@@ -132,53 +128,79 @@ class Graphe {
         return s;
     }
 
-    // colore un sommet avec la première couleur disponible
-    public void set_couleur_disponible(Sommet s, int k)
-    {
-        boolean available = false;
+    public int coloration_preferences(Sommet s){
+        boolean disponible = false;
         int couleur = 1;
 
-        if(s.preferences.size() > 0)
+        if(s.voisins.size() == 0){
+            s.setCouleur(s.preferences.get(0).getCouleur());
+        }
+        else
         {
-            if(s.voisins.size() == 0){
-                s.setCouleur(s.preferences.get(0).getCouleur());
-            }
-            else
-            {
-                int i = 0;
-                while(i < s.preferences.size() & !available){
-                    int couleur_pref = s.preferences.get(i).getCouleur();
-                    if(s.preferences.get(i).getCouleur() != 0)
-                        couleur = couleur_pref;
-                    for(Sommet voisin : s.voisins) {
-                        if (voisin.getCouleur() == couleur) {
-                            couleur++;
-                            if(couleur != couleur_pref){
-                                ajuster_coloration(s.preferences.get(i),couleur);
-                                if(couleur != couleur_pref)
-                                    ajuster_coloration(s, couleur_pref);
-                            }
+            int i = 0;
+            while(i < s.preferences.size() & !disponible){
+                int couleur_pref = s.preferences.get(i).getCouleur();
+                if(s.preferences.get(i).getCouleur() != 0)
+                    couleur = couleur_pref;
+                for(Sommet voisin : s.voisins) {
+                    if (voisin.getCouleur() == couleur) {
+                        couleur++;
+                        if(couleur != couleur_pref){
+                            ajuster_coloration(s.preferences.get(i),couleur);
+                            if(couleur != couleur_pref)
+                                ajuster_coloration(s, couleur_pref);
                         }
-                        available = true;
                     }
+                    disponible = true;
                 }
             }
+        }
+        return couleur;
+    }
+
+    public int coloration_trivial(Sommet s){
+        boolean disponible = false;
+        int couleur = 1;
+        int tmp_couleur = 0;
+
+
+        if (s.voisins.size() == 0) {
+            s.setCouleur(couleur);
         }
         else {
-            System.out.println("Sommet courant : " + s.getNom() + " ");
-            if (s.voisins.size() == 0) {
-                s.setCouleur(1);
-            } else {
-                while (!available) {
-                    for (Sommet voisin : s.voisins) {
-                        if (voisin.getCouleur() == couleur) {
+            while (!disponible) {
+                for (Sommet voisin : s.voisins) {
+                    if (voisin.getCouleur() == couleur) {
+                        couleur++;
+                        if(couleur == tmp_couleur)
                             couleur++;
-                        }
                     }
-                    available = true;
+                    else{
+                        tmp_couleur = voisin.getCouleur();
+                    }
                 }
+                disponible = true;
             }
         }
+        return couleur;
+    }
+
+    public void set_couleur_disponible(Sommet s, int k)
+    {
+        int couleur;
+
+        if(s.preferences.size() > 0) {
+            couleur = coloration_preferences(s);
+        }
+        else {
+            couleur = coloration_trivial(s);
+        }
+
+        if(couleur > k) {
+            retireSommet(s);
+            System.out.println("Coloration du sommet ["+ s.getNom()+"] impossible !");
+        }
+        else
             s.setCouleur(couleur);
 
     }
@@ -197,6 +219,34 @@ class Graphe {
 
     }
 
+    public void coloration_sommets_spill(Sommet sommet,int k){
+        int tmp_couleur = 0;
+        int couleur = 1;
+        if(sommet.voisins.get(0).getCouleur() != 0){
+            couleur = sommet.voisins.get(0).getCouleur();
+        }
+
+        ajoutSommet(sommet);
+        sommet.setCouleur(couleur);
+        for(Sommet voisin: sommet.voisins){
+            if(couleur == voisin.getCouleur()){
+                couleur++;
+                if(couleur == tmp_couleur)
+                    couleur++;
+            }
+            else{
+                tmp_couleur = voisin.getCouleur();
+            }
+        }
+        if(couleur > k){
+            retireSommet(sommet);
+            System.out.println("Ajout et coloration  du sommet spill ["+ sommet.getNom()+"] impossible !");
+        }
+        else
+            sommet.setCouleur(couleur);
+    }
+
+
     public void colorier(int k)
     {
 
@@ -214,6 +264,10 @@ class Graphe {
             retireSommet(s);
             colorier(k); //ToDo essayer de reintégrer le sommet si possible
             sommets_spille.add(s);
+            if(sommets_spille.size() != 0){
+                coloration_sommets_spill(s,k);
+            }
+
         }
     }
 
@@ -238,31 +292,59 @@ class main {
     public static void main(String[] args ) {
         int k = 3;
 
-/*
-        //essai simple
-        System.out.println("Test n°1 : \n sommets {a,b,c,d} \n arètes {ab,ac,bd,cd} \n aucune préférences");
-        Sommet a = new Sommet("a");
-        Sommet b = new Sommet("b");
-        Sommet c = new Sommet("c");
-        Sommet d = new Sommet("d");
 
-        a.arète(b);
-        a.arète(c);
-        b.arète(d);
-        c.arète(d);
+        System.out.println("\n\n\n============== n°1 ==============");
+        System.out.println("Test n°1 : \n sommets {a,b,c,d} \n arètes {ab,ac,bd,bc,cd} \n aucune préférences");
+        System.out.println("Test la coloration");
+        Sommet a1 = new Sommet("a");
+        Sommet b1 = new Sommet("b");
+        Sommet c1 = new Sommet("c");
+        Sommet d1 = new Sommet("d");
 
-        ArrayList<Sommet> ss = new ArrayList<Sommet>();
-        ss.add(a);
-        ss.add(b);
-        ss.add(c);
-        ss.add(d);
-        Graphe g1 = new Graphe(ss);
+        a1.arète(b1);
+        a1.arète(c1);
+        b1.arète(d1);
+        b1.arète(c1);
+        c1.arète(d1);
+
+        ArrayList<Sommet> sommets1 = new ArrayList<Sommet>();
+        sommets1.add(a1);
+        sommets1.add(b1);
+        sommets1.add(c1);
+        sommets1.add(d1);
+        Graphe g1 = new Graphe(sommets1);
         g1.colorier(k);
         System.out.println(g1.toString());
         System.out.println(g1.toStringSpill());
-*/
-        //essai demandé
-        System.out.println("Test n°1 : \n sommets {u,v,w,x,y,z} \n arètes {uy,ux,vz,vx,vw,wy,yx} \n préference : u avec w");
+
+        System.out.println("\n\n\n============== n°2 ==============");
+        System.out.println("Test n°2 : \n sommets {a,b,c,d} \n arètes {ab,ac,ad,bd,bc,cd} \n aucune préférences");
+        System.out.println("Test la coloration optimiste (essai de réinsérer les sommets spills)");
+        Sommet a2 = new Sommet("a");
+        Sommet b2 = new Sommet("b");
+        Sommet c2 = new Sommet("c");
+        Sommet d2 = new Sommet("d");
+
+        a2.arète(b2);
+        a2.arète(c2);
+        a2.arète(d2);
+        b2.arète(d2);
+        b2.arète(c2);
+        c2.arète(d2);
+
+        ArrayList<Sommet> sommets2 = new ArrayList<Sommet>();
+        sommets2.add(a2);
+        sommets2.add(b2);
+        sommets2.add(c2);
+        sommets2.add(d2);
+        Graphe g2 = new Graphe(sommets2);
+        g2.colorier(k);
+        System.out.println(g2.toString());
+        System.out.println(g2.toStringSpill());
+
+        System.out.println("\n\n\n============== n°3 ==============");
+        System.out.println("Test n°3 : \n sommets {u,v,w,x,y,z} \n arètes {uy,ux,vz,vx,vw,wy,yx} \n préference : u avec w");
+        System.out.println("Test la coloration par préférences");
         Sommet u = new Sommet("u");
         Sommet v = new Sommet("v");
         Sommet w = new Sommet("w");
@@ -280,17 +362,17 @@ class main {
         y.arète(x);
 
         u.ajoutPreference(w);
-        ArrayList<Sommet> sommets = new ArrayList<Sommet>();
-        sommets.add(u);
-        sommets.add(v);
-        sommets.add(w);
-        sommets.add(x);
-        sommets.add(y);
-        sommets.add(z);
-        Graphe g2 = new Graphe(sommets);
-        g2.colorier(k);
-        System.out.println(g2.toString());
-        System.out.println(g2.toStringSpill());
+        ArrayList<Sommet> sommets3 = new ArrayList<Sommet>();
+        sommets3.add(u);
+        sommets3.add(v);
+        sommets3.add(w);
+        sommets3.add(x);
+        sommets3.add(y);
+        sommets3.add(z);
+        Graphe g3 = new Graphe(sommets3);
+        g3.colorier(k);
+        System.out.println(g3.toString());
+        System.out.println(g3.toStringSpill());
     }
 
 }
