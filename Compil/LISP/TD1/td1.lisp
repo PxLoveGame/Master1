@@ -50,7 +50,7 @@
 ;==== 4 - fonctions sur les listes plates ====
 (setf l '(1 2 3 4 5 6 7 8 9))
 
-(defun mymember (x l)(
+(defun mymember (x l)(applu #'TEST (car l)
   if(eql car(l) x)
     l
     ((mymember (x cdr(l))
@@ -68,7 +68,15 @@
 (defun mylast (l)
 (
   if(eql (cdr l) NIL )
-    (car l)
+    (car l)(defun mymember (x l &key (test #'eql)) ; pour changer le comportement du test => #'eql par exemple ou d'autres qu'on a pu définir.
+  (if(NULL l)
+    ()
+    (if (apply test x (car l))
+      (l)
+      (mymember x (cdr l) :test)
+    )
+  )
+)
     (mylast (cdr l))
 ))
 
@@ -84,4 +92,78 @@
 (
   reverse (mymakelistreverse n)
 )
+)
+
+(defun myremove (x l)
+  (if(eql (car l) NIL)
+    ()
+    (if(eql x (car l))
+      (myremove(x (cdr l))
+      (cons (car l) (myremove x (cdr l)))
+    )
+  )
+)
+
+(defun myremovefirst (x l count)
+  (myremovefirstaux (x l count))
+)
+
+(defun myremovefirstaux (x l count)
+  (if(eql (car l) NIL)
+    ()
+    (if(eql count 1)
+      (cons (car l) (myremovefirstaux x (cdr l) count))
+      (if (eql x (car l))
+        (
+        setf count 1
+        myremovefirstaux x (cdr l) count
+        )
+        (cons (car l) (myremovefirstaux x (cdr l) count)
+      )
+    )
+  )
+)
+
+
+(defun myappend (l1 l2)
+     (if (and (eql (car l1) NIL) (eql (car l2) NIL))
+      ()
+      (if (and (eql (car l1) NIL) (not (eql (car l2) NIL)))
+        (cons (car l2) (myappend l1 (cdr l2)))
+        (if (and (not (eql (car l1) NIL)) (not (eql (car l2) NIL)))
+          (cons (car l1) (myappend (cdr l1) l2))
+        )
+      )
+     )
+)
+
+(defun myadjoin (l x)
+     (
+          if(eql (car l) NIL)
+            (cons x l)
+            (if(eql x (car l))
+              ()
+              (cons (car l) (myadjoin (cdr l) x))
+          )
+     )
+)
+
+;==== récursion terminal ====
+
+(defun fact(n) ; L'appel recursif n'est pas la dernière instructions (doit dépiler pour faire la multiplication => SALE)
+  (if(<= n 1)
+    (1)
+    (* n (fact (- n 1)))
+  )
+)
+
+; Solution
+
+(defun fact (n) (fact-term n 1))
+
+(defun fact-term (n r)
+  (if( <= n 1)
+    (r)
+    (fact-term (- n 1) (* r n))
+  )
 )
