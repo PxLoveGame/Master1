@@ -1,6 +1,12 @@
 
 
 import java.util.ArrayList;
+/* Coloriage de graphes, contiens :
+- Création de graphes
+- coloration simpliste
+- coloration optimiste
+- coloration par préférences
+RENDU par Anthony Chaillot */
 
 class Sommet {
 
@@ -287,7 +293,7 @@ class Graphe {
     }
 }
 
-class main {
+class Coloration {
 
     public static void main(String[] args ) {
         int k = 3;
