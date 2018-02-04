@@ -1,0 +1,51 @@
+
+
+TD 1 : Java RMI
+
+1) Donner la procedure exacte pour lancer le serveur puis le client.
+
+    rmiregistry &  :: lance le registre (besoin si on utilise un getRegistry)
+    java helloworld.server :: lance le server
+    java helloworld.client :: lance le client
+
+2) Que se passe t-il si on remplace la ligne 15 de Server.java par la ligne 14 (commentee) ?
+
+    si on remplace par la ligne 15 alors on pas besoin de lancé de registre (il sera lancé par la commande)
+    si on utilise la ligne 14 alors il récupérera le registre (sur le port par défaut) uniquement si celui ci à été lancé au préalable.
+
+3) Donnez les affichages chez le client et chez le serveur
+
+Chez le serveur :
+    serveur ready
+    the serveur prints : Hello, world !
+
+Chez le client : 
+    response : Hello, world !
+
+
+4) Dans quelle JVM seront créée les objets de type HelloImpl ?
+
+    Ils sont créée dans la JVM du serveur.
+
+5) A quoi sert l'interface Hello.java ?
+
+    Permet de spécifier les méthodes que l'on peut appeler à distance
+    Permet de typer le proxy coté client (par l'interface : pour le coté génériques)
+    /!\ l'interface doit être distribuée chez le serveur et le client /!\
+
+6) Donnez des exemples d'exceptions pouvant être attrapés par la ligne 22 du server.java ?
+
+    . Erreur de connection :si le registre n'est pas définie avant le serveur => getRegistry() retournera une exception
+    . Erreur de bind  : si le nom est déjà utilisé. => AlreadyBoundException
+
+7) quelle est la différences entre naming.bind et naming.rebind ?
+
+    bind = créée un bind (n'existant pas déjà)  / rebind = crée un nouveau ou modifie un bind déjà existants. 
+
+8) Que se passe t-il si on ne passe pas d'argument en ligne de commande quand on lance le client ? 
+
+
+
+
+lors d'un lookUp("Hello"); sur le client
+il faut avoir bind("Hello", obj);  sur le serveur sinon il ne le trouve pas.
