@@ -10,9 +10,9 @@ public class Cabinet extends UnicastRemoteObject implements ICabinet {
 
     public Cabinet() throws RemoteException {
         try{
-            patients.add(new Animal("Bobo", "Frank", "Bonobo", "difficulté a respirer"));
-            patients.add(new Animal("Chen", "Théo", "Chien", "difficulté a marcher"));
-            patients.add(new Animal("Cathy", "Monique", "Chat", "difficulté a voir"));
+            patients.add(new Animal("Bobo", "Frank", new Espece("Singe"), "difficulté a respirer"));
+            patients.add(new Animal("Chen", "Théo", new Espece("Chien"), "difficulté a marcher"));
+            patients.add(new Animal("Cathy", "Monique",new Espece("Chat"), "difficulté a voir"));
         } catch(RemoteException e) {
             e.printStackTrace();
         }
