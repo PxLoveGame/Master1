@@ -1,0 +1,54 @@
+
+(* exercice 1 *)
+
+Parameter E: Set.
+
+Parameter P : E -> Prop.
+Parameter Q : E -> Prop.
+
+
+Lemma ex1a : (forall x : E, (P x) -> (Q x)) -> (exists x : E, (P x)) -> exists x : E, (Q x).
+intros.
+elim H0.
+intros.
+exists x.
+apply H.
+assumption.
+Qed.
+
+
+Lemma ex1b : (exists x : E, (P x)) \/ (exists x : E, (Q x)) -> (exists x : E, (P x) \/ (Q x)).
+intros.
+elim H.
+intros.
+elim H0.
+intros.
+exists x.
+left.
+apply H1.
+
+intros.
+elim H0.
+intros.
+exists x.
+right.
+apply H1.
+Qed.
+
+(* Exercice 2 *)
+
+Open Scope list_scope.
+
+Lemma ex2 : (forall E : Set, (forall l : (list E), forall l' : (list E), length(l ++ l') = (length l) + (length l'))).
+
+intros.
+elim l'.
+elim l.
+reflexivity.
+
+intros.
+simpl.
+
+
+
+

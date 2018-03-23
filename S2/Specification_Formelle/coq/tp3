@@ -1,0 +1,126 @@
+(* e ::= n | e1 + e2 | e1 - e2 | e1 x e2 | e1 / e2 *)
+Require Export ZArith.
+Open Scope Z_scope.
+
+(* ex 1 : opération de base *) 
+(* exemple de programme : calculatrice *)
+
+(* Syntaxique *)
+Inductive  expr : Set :=
+| Cte : Z -> expr
+| Plus : expr -> expr -> expr
+| Moins : expr -> expr -> expr
+| Mult : expr -> expr -> expr
+| Div : expr -> expr -> expr.
+
+(* Sémantique *)
+
+
+(* eval à utilisé *)
+Inductive eval : expr -> Z -> Prop :=
+| ECte : forall c : Z , eval (Cte c) c
+| EPlus : forall (e1 e2 : expr) (v v1 v2 : Z),
+  eval e1 v1 -> eval e2 v2 ->  (v = v1 + v2) -> eval (Plus e1 e2) v
+| EMoins : forall(e1 e2 : expr) (v v1 v2 : Z),
+  eval e1 v1 -> eval e2 v2 -> (v = v1 - v2) -> eval (Moins e1 e2) v
+| EMult : forall(e1 e2 : expr) (v v1 v2 : Z),
+  eval e1 v1 -> eval e2 v2 -> (v = v1 * v2) -> eval (Mult e1 e2) v
+| EDiv : forall(e1 e2 : expr) (v v1 v2 : Z),
+  eval e1 v1 -> eval e2 v2 -> (v = v1 / v2) -> eval (Div e1 e2) v.
+
+
+
+
+(* Extraction d'inteprètes *) 
+Fixpoint f_eval (e : expr) : Z :=
+match e with
+| Cte c => c
+| Plus e1 e2 =>
+  let v1 := f_eval e1 in
+  let v2 := f_eval e2 in
+  v1 + v2
+| Moins e1 e2 =>
+  let v1 := f_eval e1 in
+  let v2 := f_eval e2 in
+  v1 - v2
+| Mult e1 e2 =>
+  let v1 := f_eval e1 in
+  let v2 := f_eval e2 in
+  v1 * v2
+| Div e1 e2 =>
+  let v1 := f_eval e1 in
+  let v2 := f_eval e2 in 
+  v1 / v2
+end.
+
+(* exemples d'évaluation (lemmes) *) 
+Definition t_add : expr := Plus (Cte 1) (Cte 2).
+Definition t_moins : expr := Moins (Cte 10) (Cte 5).
+Definition t_mult : expr := Mult (Cte 5) (Cte 2).
+Definition t_div : expr := Div (Cte 10) (Cte 2).
+Lemma exempleAddition : eval t_add 3 .
+eapply EPlus.
+eapply ECte.
+eapply ECte.
+reflexivity.
+Qed.
+
+
+Lemma exempleSoustraction : eval t_moins 5 .
+eapply EMoins.
+eapply ECte.
+eapply ECte.
+reflexivity.
+Qed.
+
+Lemma exempleMultiplication : eval t_mult 10 .
+eapply EMult.
+eapply ECte.
+eapply ECte.
+reflexivity.
+Qed.
+
+Lemma exempleDivision : eval t_div 5 .
+eapply EDiv.
+eapply ECte.
+eapply ECte.
+reflexivity.
+Qed.
+
+(* tactique *)
+Ltac calcul_auto :=
+  (repeat
+   match goal with
+   | |- (eval (Plus ?X ?Y) _) => eapply EPlus
+   | |- (eval (Moins ?X ?Y) _) => eapply EMoins
+   | |- (eval (Mult ?X ?Y) _) => eapply EMult
+   | |- (eval (Div ?X ?Y) _) => eapply EDiv
+   | |- (eval (Cte ?X) _) => eapply ECte
+end);
+auto;
+reflexivity.
+
+(* exemple avec tactique *) 
+
+Lemma auto_exempleAddition : eval t_add 3.
+unfold t_add.
+calcul_auto.
+Qed.
+
+Lemma auto_exempleSoustraction : eval t_moins 5.
+unfold  t_moins.
+calcul_auto.
+Qed.
+
+Lemma auto_exempleMultiplication : eval t_mult 10.
+unfold t_mult.
+calcul_auto.
+Qed.
+
+Lemma auto_exempleDivision : eval t_div 5.
+unfold t_div.
+calcul_auto.
+Qed.&
+
+
+
