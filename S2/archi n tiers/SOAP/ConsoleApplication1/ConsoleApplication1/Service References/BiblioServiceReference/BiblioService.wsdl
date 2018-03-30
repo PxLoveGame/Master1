@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="HelloWorld">
+        <s:complexType />
+      </s:element>
+      <s:element name="HelloWorldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="afficherUtilisateurs">
+        <s:complexType />
+      </s:element>
+      <s:element name="afficherUtilisateursResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="afficherUtilisateursResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="afficherLivres">
+        <s:complexType />
+      </s:element>
+      <s:element name="afficherLivresResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="afficherLivresResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getLivreDescription">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="livre" type="tns:Livre" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Livre">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="titre" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="auteur" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="isbn" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="nbExemplaire" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="editeur" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getLivreDescriptionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getLivreDescriptionResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="rechercheParAuteur">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="auteur" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="rechercheParAuteurResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="rechercheParAuteurResult" type="tns:ArrayOfLivre" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfLivre">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Livre" nillable="true" type="tns:Livre" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="rechercheParISBN">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="isbn" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="rechercheParISBNResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="rechercheParISBNResult" type="tns:Livre" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="publierCommentaire">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="inscrit" type="tns:Inscrit" />
+            <s:element minOccurs="0" maxOccurs="1" name="contenu" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="livre" type="tns:Livre" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Inscrit">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Utilisateur" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Utilisateur">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="mdp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nom" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="publierCommentaireResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="publierCommentaireResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="authentificationInscrit">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="mdp" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="authentificationInscritResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="authentificationInscritResult" type="tns:Inscrit" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="inscription">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="nom" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mdp" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="inscriptionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="inscriptionResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="authentificationBibliothecaire">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="mdp" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="authentificationBibliothecaireResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="authentificationBibliothecaireResult" type="tns:Bibliothecaire" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Bibliothecaire">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Utilisateur" />
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="ajoutInscrit">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="bibliothecaire" type="tns:Bibliothecaire" />
+            <s:element minOccurs="0" maxOccurs="1" name="nom" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mdp" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ajoutInscritResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ajoutInscritResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ajoutLivre">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="bibliothecaire" type="tns:Bibliothecaire" />
+            <s:element minOccurs="0" maxOccurs="1" name="titre" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="auteur" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="isbn" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="nbExemplaire" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="editeur" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ajoutLivreResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ajoutLivreResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="retirerLivre">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="bibliothecaire" type="tns:Bibliothecaire" />
+            <s:element minOccurs="0" maxOccurs="1" name="titre" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="auteur" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="editeur" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="retirerLivreResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="retirerLivreResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="retirerUtilisateur">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="bibliothecaire" type="tns:Bibliothecaire" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="nom" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="retirerUtilisateurResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="retirerUtilisateurResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HelloWorldSoapIn">
+    <wsdl:part name="parameters" element="tns:HelloWorld" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldSoapOut">
+    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
+  </wsdl:message>
+  <wsdl:message name="afficherUtilisateursSoapIn">
+    <wsdl:part name="parameters" element="tns:afficherUtilisateurs" />
+  </wsdl:message>
+  <wsdl:message name="afficherUtilisateursSoapOut">
+    <wsdl:part name="parameters" element="tns:afficherUtilisateursResponse" />
+  </wsdl:message>
+  <wsdl:message name="afficherLivresSoapIn">
+    <wsdl:part name="parameters" element="tns:afficherLivres" />
+  </wsdl:message>
+  <wsdl:message name="afficherLivresSoapOut">
+    <wsdl:part name="parameters" element="tns:afficherLivresResponse" />
+  </wsdl:message>
+  <wsdl:message name="getLivreDescriptionSoapIn">
+    <wsdl:part name="parameters" element="tns:getLivreDescription" />
+  </wsdl:message>
+  <wsdl:message name="getLivreDescriptionSoapOut">
+    <wsdl:part name="parameters" element="tns:getLivreDescriptionResponse" />
+  </wsdl:message>
+  <wsdl:message name="rechercheParAuteurSoapIn">
+    <wsdl:part name="parameters" element="tns:rechercheParAuteur" />
+  </wsdl:message>
+  <wsdl:message name="rechercheParAuteurSoapOut">
+    <wsdl:part name="parameters" element="tns:rechercheParAuteurResponse" />
+  </wsdl:message>
+  <wsdl:message name="rechercheParISBNSoapIn">
+    <wsdl:part name="parameters" element="tns:rechercheParISBN" />
+  </wsdl:message>
+  <wsdl:message name="rechercheParISBNSoapOut">
+    <wsdl:part name="parameters" element="tns:rechercheParISBNResponse" />
+  </wsdl:message>
+  <wsdl:message name="publierCommentaireSoapIn">
+    <wsdl:part name="parameters" element="tns:publierCommentaire" />
+  </wsdl:message>
+  <wsdl:message name="publierCommentaireSoapOut">
+    <wsdl:part name="parameters" element="tns:publierCommentaireResponse" />
+  </wsdl:message>
+  <wsdl:message name="authentificationInscritSoapIn">
+    <wsdl:part name="parameters" element="tns:authentificationInscrit" />
+  </wsdl:message>
+  <wsdl:message name="authentificationInscritSoapOut">
+    <wsdl:part name="parameters" element="tns:authentificationInscritResponse" />
+  </wsdl:message>
+  <wsdl:message name="inscriptionSoapIn">
+    <wsdl:part name="parameters" element="tns:inscription" />
+  </wsdl:message>
+  <wsdl:message name="inscriptionSoapOut">
+    <wsdl:part name="parameters" element="tns:inscriptionResponse" />
+  </wsdl:message>
+  <wsdl:message name="authentificationBibliothecaireSoapIn">
+    <wsdl:part name="parameters" element="tns:authentificationBibliothecaire" />
+  </wsdl:message>
+  <wsdl:message name="authentificationBibliothecaireSoapOut">
+    <wsdl:part name="parameters" element="tns:authentificationBibliothecaireResponse" />
+  </wsdl:message>
+  <wsdl:message name="ajoutInscritSoapIn">
+    <wsdl:part name="parameters" element="tns:ajoutInscrit" />
+  </wsdl:message>
+  <wsdl:message name="ajoutInscritSoapOut">
+    <wsdl:part name="parameters" element="tns:ajoutInscritResponse" />
+  </wsdl:message>
+  <wsdl:message name="ajoutLivreSoapIn">
+    <wsdl:part name="parameters" element="tns:ajoutLivre" />
+  </wsdl:message>
+  <wsdl:message name="ajoutLivreSoapOut">
+    <wsdl:part name="parameters" element="tns:ajoutLivreResponse" />
+  </wsdl:message>
+  <wsdl:message name="retirerLivreSoapIn">
+    <wsdl:part name="parameters" element="tns:retirerLivre" />
+  </wsdl:message>
+  <wsdl:message name="retirerLivreSoapOut">
+    <wsdl:part name="parameters" element="tns:retirerLivreResponse" />
+  </wsdl:message>
+  <wsdl:message name="retirerUtilisateurSoapIn">
+    <wsdl:part name="parameters" element="tns:retirerUtilisateur" />
+  </wsdl:message>
+  <wsdl:message name="retirerUtilisateurSoapOut">
+    <wsdl:part name="parameters" element="tns:retirerUtilisateurResponse" />
+  </wsdl:message>
+  <wsdl:portType name="BiblioServiceSoap">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldSoapIn" />
+      <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="afficherUtilisateurs">
+      <wsdl:input message="tns:afficherUtilisateursSoapIn" />
+      <wsdl:output message="tns:afficherUtilisateursSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="afficherLivres">
+      <wsdl:input message="tns:afficherLivresSoapIn" />
+      <wsdl:output message="tns:afficherLivresSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getLivreDescription">
+      <wsdl:input message="tns:getLivreDescriptionSoapIn" />
+      <wsdl:output message="tns:getLivreDescriptionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="rechercheParAuteur">
+      <wsdl:input message="tns:rechercheParAuteurSoapIn" />
+      <wsdl:output message="tns:rechercheParAuteurSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="rechercheParISBN">
+      <wsdl:input message="tns:rechercheParISBNSoapIn" />
+      <wsdl:output message="tns:rechercheParISBNSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="publierCommentaire">
+      <wsdl:input message="tns:publierCommentaireSoapIn" />
+      <wsdl:output message="tns:publierCommentaireSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="authentificationInscrit">
+      <wsdl:input message="tns:authentificationInscritSoapIn" />
+      <wsdl:output message="tns:authentificationInscritSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="inscription">
+      <wsdl:input message="tns:inscriptionSoapIn" />
+      <wsdl:output message="tns:inscriptionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="authentificationBibliothecaire">
+      <wsdl:input message="tns:authentificationBibliothecaireSoapIn" />
+      <wsdl:output message="tns:authentificationBibliothecaireSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ajoutInscrit">
+      <wsdl:input message="tns:ajoutInscritSoapIn" />
+      <wsdl:output message="tns:ajoutInscritSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ajoutLivre">
+      <wsdl:input message="tns:ajoutLivreSoapIn" />
+      <wsdl:output message="tns:ajoutLivreSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="retirerLivre">
+      <wsdl:input message="tns:retirerLivreSoapIn" />
+      <wsdl:output message="tns:retirerLivreSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="retirerUtilisateur">
+      <wsdl:input message="tns:retirerUtilisateurSoapIn" />
+      <wsdl:output message="tns:retirerUtilisateurSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BiblioServiceSoap" type="tns:BiblioServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="afficherUtilisateurs">
+      <soap:operation soapAction="http://tempuri.org/afficherUtilisateurs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="afficherLivres">
+      <soap:operation soapAction="http://tempuri.org/afficherLivres" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getLivreDescription">
+      <soap:operation soapAction="http://tempuri.org/getLivreDescription" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rechercheParAuteur">
+      <soap:operation soapAction="http://tempuri.org/rechercheParAuteur" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rechercheParISBN">
+      <soap:operation soapAction="http://tempuri.org/rechercheParISBN" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="publierCommentaire">
+      <soap:operation soapAction="http://tempuri.org/publierCommentaire" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authentificationInscrit">
+      <soap:operation soapAction="http://tempuri.org/authentificationInscrit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="inscription">
+      <soap:operation soapAction="http://tempuri.org/inscription" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authentificationBibliothecaire">
+      <soap:operation soapAction="http://tempuri.org/authentificationBibliothecaire" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ajoutInscrit">
+      <soap:operation soapAction="http://tempuri.org/ajoutInscrit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ajoutLivre">
+      <soap:operation soapAction="http://tempuri.org/ajoutLivre" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="retirerLivre">
+      <soap:operation soapAction="http://tempuri.org/retirerLivre" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="retirerUtilisateur">
+      <soap:operation soapAction="http://tempuri.org/retirerUtilisateur" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BiblioServiceSoap12" type="tns:BiblioServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap12:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="afficherUtilisateurs">
+      <soap12:operation soapAction="http://tempuri.org/afficherUtilisateurs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="afficherLivres">
+      <soap12:operation soapAction="http://tempuri.org/afficherLivres" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getLivreDescription">
+      <soap12:operation soapAction="http://tempuri.org/getLivreDescription" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rechercheParAuteur">
+      <soap12:operation soapAction="http://tempuri.org/rechercheParAuteur" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rechercheParISBN">
+      <soap12:operation soapAction="http://tempuri.org/rechercheParISBN" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="publierCommentaire">
+      <soap12:operation soapAction="http://tempuri.org/publierCommentaire" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authentificationInscrit">
+      <soap12:operation soapAction="http://tempuri.org/authentificationInscrit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="inscription">
+      <soap12:operation soapAction="http://tempuri.org/inscription" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authentificationBibliothecaire">
+      <soap12:operation soapAction="http://tempuri.org/authentificationBibliothecaire" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ajoutInscrit">
+      <soap12:operation soapAction="http://tempuri.org/ajoutInscrit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ajoutLivre">
+      <soap12:operation soapAction="http://tempuri.org/ajoutLivre" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="retirerLivre">
+      <soap12:operation soapAction="http://tempuri.org/retirerLivre" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="retirerUtilisateur">
+      <soap12:operation soapAction="http://tempuri.org/retirerUtilisateur" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BiblioService">
+    <wsdl:port name="BiblioServiceSoap" binding="tns:BiblioServiceSoap">
+      <soap:address location="http://localhost:11109/WebSite4/BiblioService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BiblioServiceSoap12" binding="tns:BiblioServiceSoap12">
+      <soap12:address location="http://localhost:11109/WebSite4/BiblioService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
