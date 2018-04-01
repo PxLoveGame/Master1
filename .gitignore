@@ -1,0 +1,15 @@
+
+
+# dependencies
+S2/n_tiers/RESTFUL/clientWeb/node_modules
+
+# testing
+S2/n_tiers/RESTFUL/clientWeb/coverage
+
+# production
+S2/n_tiers/RESTFUL/clientWeb/build
+
+
+S2/n_tiers/RESTFUL/clientWeb/npm-debug.log*
+S2/n_tiers/RESTFUL/clientWeb/yarn-debug.log*
+S2/n_tiers/RESTFUL/clientWeb/yarn-error.log*
