@@ -1,0 +1,5 @@
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\Share\obj\Debug\Share.csprojResolveAssemblyReference.cache
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\Share\bin\Debug\Share.dll
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\Share\bin\Debug\Share.pdb
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\Share\obj\Debug\Share.dll
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\Share\obj\Debug\Share.pdb

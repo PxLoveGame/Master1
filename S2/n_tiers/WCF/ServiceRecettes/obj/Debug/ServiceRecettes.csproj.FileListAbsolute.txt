@@ -1,0 +1,8 @@
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\ServiceRecettes\bin\Debug\ServiceRecettes.dll.config
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\ServiceRecettes\bin\Debug\ServiceRecettes.dll
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\ServiceRecettes\bin\Debug\ServiceRecettes.pdb
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\ServiceRecettes\bin\Debug\Share.dll
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\ServiceRecettes\bin\Debug\Share.pdb
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\ServiceRecettes\obj\Debug\ServiceRecettes.csprojResolveAssemblyReference.cache
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\ServiceRecettes\obj\Debug\ServiceRecettes.dll
+c:\users\antho\onedrive\documents\visual studio 2015\Projects\WCF\ServiceRecettes\obj\Debug\ServiceRecettes.pdb
