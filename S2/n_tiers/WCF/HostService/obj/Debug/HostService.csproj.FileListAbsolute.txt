@@ -1,0 +1,10 @@
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\bin\Debug\HostService.exe.config
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\bin\Debug\HostService.exe
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\bin\Debug\HostService.pdb
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\bin\Debug\ServiceRecettes.dll
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\bin\Debug\Share.dll
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\bin\Debug\ServiceRecettes.pdb
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\bin\Debug\Share.pdb
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\obj\Debug\HostService.csprojResolveAssemblyReference.cache
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\obj\Debug\HostService.exe
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\HostService\obj\Debug\HostService.pdb

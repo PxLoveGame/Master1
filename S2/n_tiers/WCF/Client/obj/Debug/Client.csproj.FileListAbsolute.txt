@@ -1,0 +1,12 @@
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\bin\Debug\Client.exe.config
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\bin\Debug\Client.exe
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\bin\Debug\Client.pdb
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\bin\Debug\Share.dll
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\bin\Debug\Share.pdb
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\obj\Debug\Client.exe
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\obj\Debug\Client.pdb
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\bin\Debug\HostService.exe
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\bin\Debug\ServiceRecettes.dll
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\bin\Debug\HostService.pdb
+C:\Users\Antho\onedrive\documents\visual studio 2015\Projects\WCF\Client\bin\Debug\ServiceRecettes.pdb

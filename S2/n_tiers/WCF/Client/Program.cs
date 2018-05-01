@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using Share;
 
@@ -14,7 +13,7 @@ namespace Client
 
         public void start()
         {
-            channelFactory = new ChannelFactory<ServiceInterface>("SI");
+            channelFactory = new ChannelFactory<ServiceInterface>("ServiceRecettes");
             channelFactory.Open();
 
             service = channelFactory.CreateChannel();
@@ -31,17 +30,19 @@ namespace Client
             Client client = new Client();
             client.start();
 
+            int id = client.service.authentification();
             var stop = false;
             var clientAnswerInt = 0;
             var clientAnswerString = "";
+            List<Recette> recettes;
 
             while (stop != true)
             {
                 Console.WriteLine("Que voulez vous faire :");
-                Console.WriteLine("1 - Ajouter une recettes");
-                Console.WriteLine("2 - Afficher la selection courante");
-                Console.WriteLine("3 - Chercher une recherche selon un ingrédient");
-                Console.WriteLine("4 - Ajouter une recettes à sa selection courante (dernière recherche effectué)");
+                Console.WriteLine("1 - Ajouter une recette");
+                Console.WriteLine("2 - Afficher l'ensemble des recettes");
+                Console.WriteLine("3 - Chercher une recette selon un ingrédient");
+                Console.WriteLine("4 - Afficher la selection courante");
                 Console.WriteLine("5 - Quitter le service");
 
                 clientAnswerInt = int.Parse(Console.ReadLine());
@@ -49,57 +50,83 @@ namespace Client
                 switch (clientAnswerInt)
                 {
                     case 1:
-                        Recette recette = new Recette();
-                     
+                        Console.WriteLine("Veuillez saisir un nom pour votre recette ");
+                        clientAnswerString = Console.ReadLine();
+                        Recette recette = new Recette(clientAnswerString);
+                        clientAnswerString = "";
+
                         Console.WriteLine("Veuillez saisir les ingrédients (tapez stop pour quitter)");
                         while(clientAnswerString != "stop")
                         {
                             clientAnswerString = Console.ReadLine();
-                            recette.Ingredients.Add(clientAnswerString);
+                            if(!clientAnswerString.Equals("stop"))
+                            {
+                                recette.ingredients.Add(clientAnswerString);
+                            }
+
                             Console.WriteLine("Veuillez saisir un autre ingrédients (ou stop)");
                         }
 
                         clientAnswerString = "";
                     
                         client.service.AddRecette(recette);
+                        Console.WriteLine(recette.ToString());
                         break;
 
                     case 2:
-
-                        List<Recette> selection = client.service.GetCurrentSelection();
-                        Console.WriteLine(selection);
-
-                        Console.WriteLine("Voulez vous supprimer des recettes ? (0/1)");
-                        clientAnswerInt = int.Parse(Console.ReadLine());
-
-                        if(clientAnswerInt == 1)
+                        recettes = new List<Recette>();
+                        recettes = client.service.GetAllRecettes(id);
+                        
+                        foreach(Recette r in recettes)
                         {
-                            foreach (Recette r in selection)
-                            {
-                                Console.WriteLine("Voulez vous supprimer la recette de votre selection ? (0/1)");
-                                clientAnswerInt = int.Parse(Console.ReadLine());
-                                if (clientAnswerInt == 1)
-                                {
-                                    client.service.RemoveOfCurrentSelection(r);
-                                }
-                            }
+                            Console.WriteLine(r.ToString());
                         }
-                        clientAnswerInt = 0;
+
                         break;
+                        
 
                     case 3:
                         Console.WriteLine("Saisissez l'ingrédient pour la recherche");
                         clientAnswerString = Console.ReadLine();
 
-                        List<Recette> recettes = new List<Recette>();
-                        recettes = client.service.GetCommonRecettes(clientAnswerString);
+                        recettes = new List<Recette>();
+                        recettes = client.service.GetCommonRecettes(id, clientAnswerString);
 
-                        Console.WriteLine(recettes);
+                        foreach(Recette r in recettes)
+                        {
+                            Console.WriteLine(r.ToString());
+                        }
                         break;
 
                     case 4:
+                        List<Recette> selection = client.service.GetCurrentSelection(id);
+                        foreach (Recette r in selection)
+                        {
+                            Console.WriteLine(r.ToString());
+                        }
+                        Console.WriteLine(selection.Count);
 
-                        client.service.AddLastSearchToCurrentSelection();
+                        Console.WriteLine("Voulez vous supprimer des recettes ? (0/1)");
+                        clientAnswerInt = int.Parse(Console.ReadLine());
+
+                        List<Recette> selection_temp = new List<Recette>(selection);
+
+                        if (clientAnswerInt == 1)
+                        {
+                            
+                            foreach (Recette r in selection)
+                            {
+                                Console.WriteLine("Voulez vous supprimer la recette de votre selection ? (0/1)");
+                                Console.WriteLine(r.ToString());
+                                clientAnswerInt = int.Parse(Console.ReadLine());
+                                if (clientAnswerInt == 1)
+                                {
+                                    selection_temp.Remove(r);
+                                }
+                            }
+                        }
+                        client.service.UpdateCurrentSelection(id, selection_temp);
+                        clientAnswerInt = 0;
                         break;
 
                     case 5:

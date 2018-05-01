@@ -51,6 +51,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HostService\HostService.csproj">
+      <Project>{b2c0954a-cb46-4222-84d6-0dbad176b3b6}</Project>
+      <Name>HostService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Share\Share.csproj">
       <Project>{EE48544B-39CA-4F92-9825-8C6AE3A76FE8}</Project>
       <Name>Share</Name>

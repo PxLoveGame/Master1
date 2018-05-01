@@ -9,31 +9,67 @@ namespace Share
     [ServiceContract]
     public interface ServiceInterface
     {
-        [OperationContract]
-        List<Recette> GetCommonRecettes(String ingredient);
 
         [OperationContract]
-        void AddRecette(Recette recette);
+        int authentification();
 
         [OperationContract]
-        void RemoveOfCurrentSelection(Recette r);
+        void disconnect(int id);
 
         [OperationContract]
-        List<Recette> GetCurrentSelection();
+        List<Recette> GetCommonRecettes(int id, String ingredient);
 
         [OperationContract]
-        void AddLastSearchToCurrentSelection();
+        List<Recette> GetAllRecettes(int id);
+
+        [OperationContract]
+        void AddRecette( Recette recette);
+
+        [OperationContract]
+        void UpdateCurrentSelection(int id, List<Recette> selection);
+
+        [OperationContract]
+        List<Recette> GetCurrentSelection(int id);
 
     }
 
     [DataContract]
     public class Recette
     {
+
         [DataMember]
-        public List<string> Ingredients { get; set; }
+        public string nom { get; set; }
+        [DataMember]
+        public List<string> ingredients { get; set; }
        
-        [DataMember]
-        public List<string> Etapes { get; set; }
+
+        public Recette(String n)
+        {
+            nom = n;
+            ingredients = new List<string>();
+        }
+
+        public Recette(String n, string[] i)
+        {
+            nom = n;
+            ingredients = new List<string>(i);
+        }
+
+        public override string ToString()
+        {
+            string chaine = "nom : " + nom + "\n ingrédients : ";
+            foreach (String i in ingredients)
+            {
+                chaine += "\n - " + i;
+            }
+            return chaine;
+        }
+
+        public override bool Equals(Object o)
+        {
+            Recette r = o as Recette;
+            return this.ingredients.Equals(r.ingredients) && this.nom.Equals(r.nom);
+        }
 
     }
 
@@ -45,5 +81,11 @@ namespace Share
 
         [DataMember]
         public List<List<Recette>> historique { get; set; }
+
+        public Selection()
+        {
+            selectionCourante = new List<Recette>();
+            historique = new List<List<Recette>>();
+        }
     }
 }

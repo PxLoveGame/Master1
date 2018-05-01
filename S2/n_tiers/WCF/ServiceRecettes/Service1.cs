@@ -1,6 +1,5 @@
 ﻿using Share;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 
 namespace ServiceRecettes
@@ -10,23 +9,21 @@ namespace ServiceRecettes
     public class Service1 : ServiceInterface
     {
 
+        private static int ID = 0;
+
         private List<Recette> recettes { get; set; }
-        private Selection selection { get; set; }
+        private IDictionary<int,Selection>  selection { get; set; }
 
         public Service1()
         {
-            recettes = new List<Recette>();
-            selection = new Selection();
+            recettes = new List<Recette>(new Recette[] {
+                new Recette("Mille feuilles", new string[] {"pâte feuilletée", "glaçage" , "crème"}),
+                new Recette("Eclair au chocolat", new string[] {"chocolat", "crème" }),
+                new Recette("Panini de la fac", new string[] {"un peu de viande (quelconque)", "un peu de fromage", "pain trop cuit", "beaucoup d'air"}),
+            });
+            selection = new Dictionary<int, Selection>();
         }
 
-
-        public void AddLastSearchToCurrentSelection()
-        {
-            if(selection.historique != null)
-            {
-                selection.selectionCourante.Concat(selection.historique.Last());
-            }
-        }
 
         public void AddRecette(Recette recette)
         {
@@ -36,39 +33,76 @@ namespace ServiceRecettes
             }
         }
 
-        public List<Recette> GetCommonRecettes(string ingredient)
+        public List<Recette> GetAllRecettes(int id)
+        {
+            Selection s = null;
+            selection.TryGetValue(id, out s);
+            s.historique.Add(recettes);
+
+            s.selectionCourante = new List<Recette>(recettes);
+            return recettes;
+        }
+
+        public List<Recette> GetCommonRecettes(int id, string ingredient)
         {
             List<Recette> results = new List<Recette>();
             foreach (Recette r in recettes) {
-                foreach(string i in r.Ingredients)
+                foreach(string i in r.ingredients)
                 {
-                    if(i == ingredient)
+                    if(i.Equals(ingredient))
                     {
                         results.Add(r);
                     }
                 }
             }
 
-            if(results != null)
+            if(results.Count != 0)
             {
-                selection.historique.Add(results);
+                Selection s = null;
+                selection.TryGetValue(id, out s);
+                if(s == null)
+                {
+                    return null;
+                }
+
+                s.historique.Add(results);
+                s.selectionCourante = new List<Recette>(results);
             }
 
             return results;
         }
 
-        public List<Recette> GetCurrentSelection()
+        public List<Recette> GetCurrentSelection(int id)
         {
-            return selection.selectionCourante;
+            Selection s = null;
+            selection.TryGetValue(id, out s);
+            return s.selectionCourante;
         }
 
-        public void RemoveOfCurrentSelection(Recette recette)
+        public void UpdateCurrentSelection(int id, List<Recette> selectionCourante)
         {
-            if(recette != null)
+            Selection s = null;
+            selection.TryGetValue(id, out s);
+
+            if (selection != null)
             {
-                selection.selectionCourante.Remove(recette);
+                s.selectionCourante = new List<Recette>(selectionCourante);     
             }
         }
+
+        public int authentification()
+        {
+            int id = ID++;
+            selection.Add(id, new Selection());
+            return id;
+        }
+
+        public void disconnect(int id)
+        {
+            selection.Remove(id);
+        }
+
+        
     }
 
 }

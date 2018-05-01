@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ServiceModel;
-using Share;
 using ServiceRecettes;
+using System.ServiceModel.Description;
+
 namespace HostService
 {
 
@@ -11,15 +12,18 @@ namespace HostService
         {
             Uri baseAddress = new Uri("http://localhost:8888/ServiceRecettes");
 
-            Service1 service = new Service1();
-            var host = new ServiceHost(service);
-
-            host.Open();
-
-            host.Close();
-            /*
-            using (ServiceHost host = new ServiceHost(typeof(Recette), baseAddress))
+            using (ServiceHost host = new ServiceHost(typeof(Service1)))
             {
+                // Enable metadata publishing.
+                ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
+                smb.HttpGetEnabled = true;
+                smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
+                host.Description.Behaviors.Add(smb);
+
+                // Open the ServiceHost to start listening for messages. Since
+                // no endpoints are explicitly configured, the runtime will create
+                // one endpoint per base address for each service contract implemented
+                // by the service.
                 host.Open();
 
                 Console.WriteLine("The service is ready at {0}", baseAddress);
@@ -29,7 +33,6 @@ namespace HostService
                 // Close the ServiceHost.
                 host.Close();
             }
-            */
         }
     }
 }
