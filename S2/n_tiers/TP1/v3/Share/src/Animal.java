@@ -29,27 +29,27 @@ public class Animal implements IAnimal, Serializable
 	@Override
 	public String toString()
 	{
-		StringBuilder r_to_string = new StringBuilder();
+		StringBuilder affichage = new StringBuilder();
 		
-		r_to_string.append("Animal");
-		r_to_string.append(System.getProperty("line.separator"));
-		r_to_string.append("{");			
-		r_to_string.append(System.getProperty("line.separator"));
-		r_to_string.append("Name  : ");
-		r_to_string.append(nom);
-		r_to_string.append(System.getProperty("line.separator"));
-		r_to_string.append("Master : ");
-		r_to_string.append(maitre);
-		r_to_string.append(System.getProperty("line.separator"));
-		r_to_string.append("Race  : ");
-		r_to_string.append(race);
-		r_to_string.append(System.getProperty("line.separator"));
-		r_to_string.append(espece.toString());
-		r_to_string.append(dossier.toString());
-		r_to_string.append("}");	
-		r_to_string.append(System.getProperty("line.separator"));
+		affichage.append("Animal");
+		affichage.append(System.getProperty("line.separator"));
+		affichage.append("{");			
+		affichage.append(System.getProperty("line.separator"));
+		affichage.append("Nom  : ");
+		affichage.append(nom);
+		affichage.append(System.getProperty("line.separator"));
+		affichage.append("Maitre : ");
+		affichage.append(maitre);
+		affichage.append(System.getProperty("line.separator"));
+		affichage.append("Race  : ");
+		affichage.append(race);
+		affichage.append(System.getProperty("line.separator"));
+		affichage.append(espece.toString());
+		affichage.append(dossier.toString());
+		affichage.append("}");	
+		affichage.append(System.getProperty("line.separator"));
 		
-		return r_to_string.toString();
+		return affichage.toString();
 	}
 	
 	public String getNom() throws RemoteException

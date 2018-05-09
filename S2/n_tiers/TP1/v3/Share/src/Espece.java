@@ -18,25 +18,25 @@ public class Espece implements IEspece, Serializable
 	@Override
 	public String toString()
 	{
-		StringBuilder r_to_string = new StringBuilder();
+		StringBuilder affichage = new StringBuilder();
 		
-		r_to_string.append("Breed");
-		r_to_string.append(System.getProperty("line.separator"));
-		r_to_string.append("{");
+		affichage.append("Espece");
+		affichage.append(System.getProperty("line.separator"));
+		affichage.append("{");
 	
-		r_to_string.append("\t");
-		r_to_string.append("Breed :");
-		r_to_string.append(nom);
-		r_to_string.append(System.getProperty("line.separator"));
+		affichage.append("\t");
+		affichage.append("Espece :");
+		affichage.append(nom);
+		affichage.append(System.getProperty("line.separator"));
 		
-		r_to_string.append("\t");
-		r_to_string.append("Life  :");
-		r_to_string.append(esperence);
-		r_to_string.append(System.getProperty("line.separator"));
-		r_to_string.append("}");
-		r_to_string.append(System.getProperty("line.separator"));
+		affichage.append("\t");
+		affichage.append("Durée de vie :");
+		affichage.append(esperence);
+		affichage.append(System.getProperty("line.separator"));
+		affichage.append("}");
+		affichage.append(System.getProperty("line.separator"));
 		
-		return r_to_string.toString();
+		return affichage.toString();
 	}
 	
 	@Override	

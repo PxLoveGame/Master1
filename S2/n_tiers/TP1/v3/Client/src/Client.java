@@ -3,57 +3,91 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 public class Client
 {
-	private static final String DEFAULT_REGISTRY_KEY = "veterinary_practice";
 
 	public static void main(String [] args)
 	{	
-		/*
-		System.setProperty("java.security.policy", "file:D:\\workspace\\RMI\\TP1Client\\client.policy");
-		System.setProperty("java.rmi.server.codebase","file:D:\\workspace\\RMI\\TP1Server\\bin\\");
+
+		Scanner saisie = new Scanner(System.in);
+		int choix;
+		boolean stop = false;
 	
-		System.setSecurityManager(new SecurityManager());
-		*/
-		
-		Scanner t_keyboard = new Scanner(System.in);
 		
 		try
 		{
 			System.out.println("[Connection...]");
 			
-			Registry t_registry = LocateRegistry.getRegistry(1100);
+			Registry registry = LocateRegistry.getRegistry(1100);
 			
-			System.out.println("[Connected]");
+			System.out.println("[Connecté]");
 
-			System.out.println("[Get VeterinaryPractice]");	
-			ICabinet cabinet = (ICabinet) t_registry.lookup(DEFAULT_REGISTRY_KEY);
-			System.out.println("[VeterinaryPractice getted]");
+			System.out.println("[Recherche du Cabinet...]");	
+			ICabinet cabinet = (ICabinet) t_registry.lookup("Cabinet");
+			System.out.println("[Cabinet récupéré]");
 			
-			System.out.println("[Add veterinary]");
-			IVeterinaire t_veterinary = new Veterinaire("Toto");
-			cabinet.addVeterinaire(t_veterinary);
-			System.out.println("[Veterinary added]");
+			System.out.println("[Ajout d'un vétérinaire..]");
+			IVeterinaire veterinaire = new Veterinaire("Anthony");
+			cabinet.addVeterinaire(veterinaire);
+			System.out.println("[Vétérinaire ajouté]");
 			
-			System.out.println("[Add animal]");
-			System.out.print("Animal name : ");
-			String t_animal_name =t_keyboard.nextLine();
-			System.out.println("");
-			cabinet.addAnimal(new Animal(t_animal_name, "Jean-Kevin", "Pokemon", new Espece("Eau", 42), new Dossier("Ok.")));	
-			System.out.println("[Animal added]");
-			
-			System.out.println("[Get animal]");		
-			IAnimal t_animal = cabinet.getAnimal(t_animal_name);	
-			System.out.println(t_animal.getInfos());	
-			System.out.println("[Animal getted]");
+			while(!stop){
+				StringBuilder affichage = new StringBuilder();
 
-			System.out.println("[Add animal with SubBreed (Client only)]");
-			System.out.print("Animal name : ");
-			t_animal_name =t_keyboard.nextLine();
-			System.out.println("");
-			cabinet.addAnimal(new Animal(t_animal_name, "Jean-Kevin", "Pokemon", new SousEspece("Eau", 42), new Dossier("Ok.")));
-			System.out.println("[Animal added]");
-			
-			System.out.println("Please, press enter to continue");
-			t_keyboard.nextLine();
+				affichage.append("Que voulez vous faire : ");
+				affichage.append(System.getProperty("line.separator"));
+				affichage.append("1 - Ajouter un animal ");
+				affichage.append(System.getProperty("line.separator"));
+				affichage.append("2 - Retirer un animal ");
+				affichage.append(System.getProperty("line.separator"));
+				affichage.append("3 - Quitter ");
+
+				System.out.println(affichage.toString());
+
+				choix = saisie.nextLine();
+
+				switch(choix){
+					case 1 : 
+						System.out.println("[Ajouter un animal]");
+						System.out.print("Veuillez saisir son nom : ");
+						String nom = saisie.nextLine();
+						System.out.println("");
+						cabinet.addAnimal(new Animal(nom, "Jean-Kevin", "Labrador", new Espece("Chien", 15), new Dossier("Ok.")));	
+						System.out.println("[Animal ajouté]");
+
+						System.out.println("[Récupération des informations le concernant...]");		
+						IAnimal animal = cabinet.getAnimal(nom);	
+						System.out.println(animal.getInfos());	
+
+
+						System.out.println("[Ajouter un animal avec une sous Espece (Connu uniquement par le client)]");
+						System.out.print("Veuillez saisir son nom : ");
+						nom = saisie.nextLine();
+						System.out.println("");
+						cabinet.addAnimal(new Animal(nom, "Jean-Kevin", "Pouloulou", new SousEspece("Oiseau", 2500), new Dossier("Ok.")));
+						System.out.println("[Animal ajouté]");
+
+						System.out.println("[Récupération des informations le concernant...]");		
+						animal = cabinet.getAnimal(nom);	
+						System.out.println(animal.getInfos());
+						break;
+
+					case 2 : 
+						System.out.println("[Retirer un animal]");
+						System.out.print("Veuillez saisir son nom : ");
+						String nom = saisie.nextLine();
+						System.out.println("");
+						cabinet.removeAnimal(nom);	
+						System.out.println("[Animal retiré]");
+						break;
+
+					case 3 :
+						System.out.println("[Deconnexion...]");
+						stop = true;
+						System.out.println("[FIN]");
+						break;
+				}
+
+			}
+
 			t_keyboard.close();
 		}	
 		catch(Exception t_exception)

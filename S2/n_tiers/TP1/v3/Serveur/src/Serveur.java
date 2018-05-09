@@ -4,55 +4,38 @@ import java.rmi.registry.Registry;
 public class Serveur
 {
 	private static final String JAVA_PROPERTY_POLICY = "java.security.policy";
-
 	private static final String JAVA_SECURITY_POLICY_SERVER = "..\\server.policy";
-	private static final int DEFAULT_PORT = 1100;
-	private static final String DEFAULT_REGISTRY_KEY = "veterinary_practice";
-	
-	private static final String MESSAGE_REGISTRY_CREATED = "Registry created";
-	private static final String MESSAGE_REGISTRY_BINDED = "Registry binded";
-	
-	private static final String ERROR_MESSAGE_REGISTRY_NOT_FOUND = "Registry not found";
-	
-	private static final String ERROR_MESSAGE_EXCEPTION = "Error : ";
-	
+		
 	public static void main(String args[])
 	{
-		/*
-		System.setProperty("java.security.policy", "file:D:\\workspace\\RMI\\TP1Server\\client.policy");
-		System.setProperty("java.rmi.server.codebase","file:D:\\workspace\\RMI\\TP1Client\\bin\\");
-	
-		System.setSecurityManager(new SecurityManager());
-		*/
-
+		
 		try
 		{
 			System.setProperty(JAVA_PROPERTY_POLICY, JAVA_SECURITY_POLICY_SERVER);
-			//System.setProperty(JAVA_PROPERTY_CODEBASE, JAVA_POLICY_CODEBASE_VALUE);
 						
 			System.setSecurityManager(new SecurityManager());
 		
-			Registry t_registry = LocateRegistry.createRegistry(DEFAULT_PORT);
+			Registry registry = LocateRegistry.createRegistry(1100);
 
-			System.out.println(MESSAGE_REGISTRY_CREATED);
+			System.out.println("Registry créé");
 			
-			if(t_registry == null)
+			if(registry == null)
 			{
-				System.err.println(ERROR_MESSAGE_REGISTRY_NOT_FOUND);
+				System.err.println("Registry introuvable");
 				
 				return;
 			}
 			
-			ICabinet t_veterinary_practice = new Cabinet();
+			ICabinet cabinet = new Cabinet();
 			
-			t_registry.rebind(DEFAULT_REGISTRY_KEY, t_veterinary_practice);
+			registry.rebind("Cabinet", cabinet);
 			
-			System.out.println(MESSAGE_REGISTRY_BINDED);
+			System.out.println("Registry bind");
 			
 		}
 		catch(Exception t_exception)
 		{
-			System.err.println(ERROR_MESSAGE_EXCEPTION + t_exception.toString());
+			System.err.println("Error : " + t_exception.toString());
 			t_exception.printStackTrace();
 		}
 	}

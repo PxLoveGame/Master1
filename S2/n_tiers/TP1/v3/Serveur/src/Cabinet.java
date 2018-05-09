@@ -23,7 +23,7 @@ public class Cabinet extends UnicastRemoteObject implements ICabinet
 	@Override
 	public void addAnimal(IAnimal newAnimal) throws RemoteException
 	{
-		System.out.println("addAnimal");
+		System.out.println("Ajout d'un animal..");
 		System.out.println(newAnimal.getInfos());
 		
 		animaux.put(newAnimal.getNom(), newAnimal);
@@ -53,7 +53,7 @@ public class Cabinet extends UnicastRemoteObject implements ICabinet
 	@Override
 	public void removeAnimal(String animal) throws RemoteException
 	{
-		System.out.println("removeAnimal");
+		System.out.println("Retrait d'un animal..");
 		
 		animaux.remove(animal).getNom();
 		
@@ -87,16 +87,14 @@ public class Cabinet extends UnicastRemoteObject implements ICabinet
 	@Override
 	public void addVeterinaire(IVeterinaire newVeterinaire) throws RemoteException
 	{
-		System.out.println("addVeterinary");
+		System.out.println("Ajout d'un vétérinaire..");
 		
 		veterinaires.add(newVeterinaire);
 	}
 	
 	@Override
 	public IAnimal getAnimal(String nom) throws RemoteException
-	{
-		System.out.println("getAnimal");
-		
+	{	
 		return animaux.get(nom);
 	}
 
