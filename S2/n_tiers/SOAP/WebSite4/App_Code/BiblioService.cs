@@ -12,18 +12,9 @@ using System.Web.Services;
 
 public class BiblioService : System.Web.Services.WebService
 {
-    /*
-    private Bibliotheque _bibliotheque;
-    public Bibliotheque bibliotheque
-    {
-        get { return _bibliotheque; }
-        set { _bibliotheque = value; }
-    }
-    */
 
     public BiblioService () {
-        //Uncomment the following line if using designed components 
-        //InitializeComponent(); 
+
     }
 
     // ============= WebMethode Utilitaire ==============
@@ -188,7 +179,7 @@ public class BiblioService : System.Web.Services.WebService
         }
         else
         {
-            return "Vous ne pouvez pas desabonné d'utilisateur car vous n'êtes pas connecté";
+            return "Vous ne pouvez pas desabonner d'utilisateur car vous n'êtes pas connecté";
         }
     }
 
