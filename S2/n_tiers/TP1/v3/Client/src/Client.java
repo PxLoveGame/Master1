@@ -10,6 +10,7 @@ public class Client
 		Scanner saisie = new Scanner(System.in);
 		int choix;
 		boolean stop = false;
+		String nom;
 	
 		
 		try
@@ -21,7 +22,7 @@ public class Client
 			System.out.println("[Connecté]");
 
 			System.out.println("[Recherche du Cabinet...]");	
-			ICabinet cabinet = (ICabinet) t_registry.lookup("Cabinet");
+			ICabinet cabinet = (ICabinet) registry.lookup("Cabinet");
 			System.out.println("[Cabinet récupéré]");
 			
 			System.out.println("[Ajout d'un vétérinaire..]");
@@ -42,13 +43,13 @@ public class Client
 
 				System.out.println(affichage.toString());
 
-				choix = saisie.nextLine();
+				choix = Integer.parseInt(saisie.nextLine());
 
 				switch(choix){
 					case 1 : 
 						System.out.println("[Ajouter un animal]");
 						System.out.print("Veuillez saisir son nom : ");
-						String nom = saisie.nextLine();
+						nom = saisie.nextLine();
 						System.out.println("");
 						cabinet.addAnimal(new Animal(nom, "Jean-Kevin", "Labrador", new Espece("Chien", 15), new Dossier("Ok.")));	
 						System.out.println("[Animal ajouté]");
@@ -73,7 +74,7 @@ public class Client
 					case 2 : 
 						System.out.println("[Retirer un animal]");
 						System.out.print("Veuillez saisir son nom : ");
-						String nom = saisie.nextLine();
+						nom = saisie.nextLine();
 						System.out.println("");
 						cabinet.removeAnimal(nom);	
 						System.out.println("[Animal retiré]");
@@ -88,11 +89,11 @@ public class Client
 
 			}
 
-			t_keyboard.close();
+			saisie.close();
 		}	
-		catch(Exception t_exception)
+		catch(Exception e)
 		{
-			t_exception.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 }
